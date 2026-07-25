@@ -1,0 +1,62 @@
+name: Construir y publicar la página
+
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/**', 'assets-manifest.txt', '.github/workflows/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construir-y-publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install --quiet requests pillow beautifulsoup4
+
+      - name: Descargar imágenes del CDN
+        run: python scripts/descargar.py
+
+      - name: Logos del carrusel sin fondo
+        run: python scripts/procesar.py
+
+      - name: Construir index.html desde la página original
+        run: python scripts/construir.py
+
+      - name: Guardar todo en el repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase || true
+          git add assets index.html
+          git diff --cached --quiet || git commit -m "Página actualizada"
+          git push
+
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empaquetar el sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
