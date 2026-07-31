@@ -62,15 +62,15 @@ config = '''<script>
    (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "",   /* MULTICONSOLA ULTIMATE RETRO™ — $39.99 */
-  b0: "",          /* JUEGOS DE PS4            — $27.99 */
-  b1: "",          /* JUEGOS DE PS5            — $29.60 */
-  b2: "",          /* JUEGOS DE XBOX SERIES    — $25.60 */
-  "gold-pc": "",   /* ULTIMATE LEYENDA         — $34.00 */
-  b3: "",          /* RETRO GAMING MOBILE      — $16.80 */
-  b4: "",          /* ULTRA RETRO MOBILE       — $19.20 */
-  b5: "",          /* PS2 MOBILE               — $17.60 */
-  "gold-mob": ""   /* PACK SUPREMO MOBILE      — $35.20 */
+  principal: "https://pay.hotmart.com/srtfx2gy",   /* MULTICONSOLA ULTIMATE RETRO™ — $39.99 */
+  b0: "https://pay.hotmart.com/c7rnch8s",          /* JUEGOS DE PS4            — $27.99 */
+  b1: "https://pay.hotmart.com/0vqlev44",          /* JUEGOS DE PS5            — $29.60 */
+  b2: "https://pay.hotmart.com/8fkm1imy",          /* JUEGOS DE XBOX SERIES    — $25.60 */
+  "gold-pc": "https://pay.hotmart.com/9zc6fnuq",   /* ULTIMATE LEYENDA         — $34.00 */
+  b3: "https://pay.hotmart.com/x0logolr",          /* RETRO GAMING MOBILE      — $16.80 */
+  b4: "https://pay.hotmart.com/moqagwmg",          /* ULTRA RETRO MOBILE       — $19.20 */
+  b5: "https://pay.hotmart.com/fdqkpr2j",          /* PS2 MOBILE               — $17.60 */
+  "gold-mob": "https://pay.hotmart.com/7l2spaxx"   /* PACK SUPREMO MOBILE      — $35.20 */
 };
 var LINKS_COMBO = {};  /* opcional: "principal+b0": "https://..." */
 </script>'''
