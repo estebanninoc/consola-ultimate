@@ -62,15 +62,15 @@ config = '''<script>
    (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "https://pay.hotmart.com/srtfx2gy",   /* MULTICONSOLA ULTIMATE RETRO™ — $39.99 */
-  b0: "https://pay.hotmart.com/c7rnch8s",          /* JUEGOS DE PS4            — $27.99 */
-  b1: "https://pay.hotmart.com/0vqlev44",          /* JUEGOS DE PS5            — $29.60 */
-  b2: "https://pay.hotmart.com/8fkm1imy",          /* JUEGOS DE XBOX SERIES    — $25.60 */
-  "gold-pc": "https://pay.hotmart.com/9zc6fnuq",   /* ULTIMATE LEYENDA         — $34.00 */
-  b3: "https://pay.hotmart.com/x0logolr",          /* RETRO GAMING MOBILE      — $16.80 */
-  b4: "https://pay.hotmart.com/moqagwmg",          /* ULTRA RETRO MOBILE       — $19.20 */
-  b5: "https://pay.hotmart.com/fdqkpr2j",          /* PS2 MOBILE               — $17.60 */
-  "gold-mob": "https://pay.hotmart.com/7l2spaxx"   /* PACK SUPREMO MOBILE      — $35.20 */
+  principal: "https://pay.hotmart.com/N106875864F?off=srtfx2gy",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
+  b0: "https://pay.hotmart.com/X106964889D?off=c7rnch8s",   /* JUEGOS DE PS4            — $27.99 */
+  b1: "https://pay.hotmart.com/O106964911H?off=0vqlev44",   /* JUEGOS DE PS5            — $29.60 */
+  b2: "https://pay.hotmart.com/F106964936U?off=8fkm1imy",   /* JUEGOS DE XBOX SERIES    — $25.60 */
+  "gold-pc": "https://pay.hotmart.com/L106972133T?off=9zc6fnuq",   /* ULTIMATE LEYENDA         — $34.00 */
+  b3: "https://pay.hotmart.com/F106971351O?off=x0logolr",   /* RETRO GAMING MOBILE      — $16.80 */
+  b4: "https://pay.hotmart.com/Q106971374Q?off=moqagwmg",   /* ULTRA RETRO MOBILE       — $19.20 */
+  b5: "https://pay.hotmart.com/M106971389O?off=fdqkpr2j",   /* PS2 MOBILE               — $17.60 */
+  "gold-mob": "https://pay.hotmart.com/Y106972171P?off=7l2spaxx"   /* PACK SUPREMO MOBILE      — $35.20 */
 };
 var LINKS_COMBO = {};  /* opcional: "principal+b0": "https://..." */
 </script>'''
