@@ -130,6 +130,80 @@ for v in ['vps2','vps4','vps5','vxbox','vxbs']:
     html2 = re.sub(r'window\.'+v+r'Play=function\(\)\{(\s*)if\(started\)return;',
         'window.'+v+"Play=function(){\\1if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}\\1if(started)return;", html2)
 
+# 9) solo se venden los packs: los bonos sueltos son vitrina del pack que los incluye
+solo_packs = '''<script>
+(function(){
+  var GRUPOS = { "gold-pc": [0,1,2], "gold-mob": [3,4,5] };
+  function cbPack(key){ return document.getElementById("cu-cb-" + key); }
+  function cbNum(i){ return document.getElementById("cu-cb" + i); }
+
+  function leer(sel){ var e = document.querySelector(sel); return e ? (parseFloat(e.textContent.replace(/[^0-9.]/g, "")) || 0) : 0; }
+  window.updateTotals = function(){
+    var total = leer(".cu-main-price"), compare = leer(".cu-main-compare");
+    ["gold-pc","gold-mob"].forEach(function(key){
+      var cb = cbPack(key);
+      if(cb && cb.checked){
+        total   += parseFloat(cb.getAttribute("data-price"))   || 0;
+        compare += parseFloat(cb.getAttribute("data-compare")) || 0;
+      }
+    });
+    var t = document.getElementById("cu-total");   if(t) t.textContent = "$" + total.toFixed(2);
+    var s = document.getElementById("cu-savings"); if(s) s.textContent = "-$" + (compare - total).toFixed(2);
+  };
+
+  function setGrupo(key, on){
+    GRUPOS[key].forEach(function(i){
+      var cb = cbNum(i); if(!cb) return;
+      cb.checked = on;
+      var card = document.getElementById("cu-b" + i);
+      if(card) card.classList.toggle("selected", on);
+      var txt = document.getElementById("cu-txt" + i);
+      if(txt) txt.setAttribute("data-label", on ? "✓ INCLUIDO EN EL PACK" : "+ AGREGAR ESTE BONO");
+    });
+  }
+
+  window.cuToggleGold = function(cb, key){
+    var card = document.getElementById("cu-b-" + key);
+    if(card) card.classList.toggle("selected", cb.checked);
+    var txt = document.getElementById("cu-txt-" + key);
+    if(txt){
+      var labels = key === "gold-pc"
+        ? ["+ AGREGAR ULTIMATE LEYENDA",    "✓ ULTIMATE LEYENDA AGREGADO"]
+        : ["+ AGREGAR PACK SUPREMO MOBILE", "✓ PACK SUPREMO MOBILE AGREGADO"];
+      txt.setAttribute("data-label", cb.checked ? labels[1] : labels[0]);
+    }
+    setGrupo(key, cb.checked);
+    updateTotals();
+  };
+
+  window.cuToggle = function(cb, i){
+    /* los bonos sueltos ya no se venden por separado: tocar uno lleva su pack completo */
+    var key = i <= 2 ? "gold-pc" : "gold-mob";
+    var pack = cbPack(key);
+    cb.checked = false;
+    if(pack){ pack.checked = !pack.checked; cuToggleGold(pack, key); }
+  };
+
+  window.cuGoCheckout = function(){
+    var keys = ["principal"];
+    ["gold-pc","gold-mob"].forEach(function(key){
+      var cb = cbPack(key); if(cb && cb.checked) keys.push(key);
+    });
+    var combo = keys.join("+");
+    var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || "";
+    if(!link){
+      var btn = document.getElementById("cu-btn"); var prev = btn.innerHTML;
+      btn.innerHTML = "⚠️ Configura tu link de pago";
+      setTimeout(function(){ btn.innerHTML = prev; }, 3000);
+      return;
+    }
+    link += (link.indexOf("?") > -1 ? "&" : "?") + "sck=" + encodeURIComponent(combo);
+    window.location.href = link;
+  };
+})();
+</script>'''
+html2 = html2.replace('</body>', solo_packs + '\n</body>', 1)
+
 open('index.html', 'w', encoding='utf-8').write(html2)
 print('index.html generado:', len(html2), 'bytes')
 assert 'assets/' in html2
