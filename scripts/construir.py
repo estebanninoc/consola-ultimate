@@ -62,7 +62,7 @@ config = '''<script>
    (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "https://pay.hotmart.com/N106875864F?off=srtfx2gy",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
+  principal: "https://pay.hotmart.com/N106875864F?off=srtfx2gy&checkoutMode=10",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
   b0: "https://pay.hotmart.com/X106964889D?off=c7rnch8s",   /* JUEGOS DE PS4            — $27.99 */
   b1: "https://pay.hotmart.com/O106964911H?off=0vqlev44",   /* JUEGOS DE PS5            — $29.60 */
   b2: "https://pay.hotmart.com/F106964936U?off=8fkm1imy",   /* JUEGOS DE XBOX SERIES    — $25.60 */
