@@ -251,7 +251,16 @@ solo_packs = '''<script>
     ".cu-incluye img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:11px;border:2px solid rgba(255,255,255,.18);display:block;margin-bottom:6px;transition:all .25s}" +
     ".cu-incluye .cu-inc-check{position:absolute;top:5px;right:5px;width:21px;height:21px;border-radius:50%;background:#1db954;color:#fff;font-size:12px;font-weight:900;display:none;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(29,185,84,.9);z-index:2}" +
     ".selected .cu-incluye img{border-color:#1db954;box-shadow:0 0 14px rgba(29,185,84,.55)}" +
-    ".selected .cu-incluye .cu-inc-check{display:flex}";
+    ".selected .cu-incluye .cu-inc-check{display:flex}" +
+    "#cu-b-gold-pc,#cu-b-gold-mob{padding:16px 14px!important}" +
+    "#cu-b-gold-pc>.cu-bump-row .cu-bump-img,#cu-b-gold-mob>.cu-bump-row .cu-bump-img{display:none!important}" +
+    "#cu-b-gold-pc .cu-bump-desc,#cu-b-gold-mob .cu-bump-desc{display:none!important}" +
+    "#cu-b-gold-pc .cu-bump-title,#cu-b-gold-mob .cu-bump-title{font-size:18px!important;line-height:1.2}" +
+    "#cu-b-gold-pc .cu-bump-price,#cu-b-gold-mob .cu-bump-price{font-size:23px!important;font-weight:900!important}" +
+    "#cu-b-gold-pc .cu-bump-compare,#cu-b-gold-mob .cu-bump-compare{font-size:13px!important}" +
+    "#cu-b-gold-pc .cu-bump-info,#cu-b-gold-mob .cu-bump-info{width:100%}" +
+    ".cu-incluye{gap:10px;margin:12px 0 6px}" +
+    ".cu-incluye li{font-size:10.5px}";
   document.head.appendChild(css);
 
   function datosDe(i){
