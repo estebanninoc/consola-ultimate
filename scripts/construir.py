@@ -130,14 +130,72 @@ for v in ['vps2','vps4','vps5','vxbox','vxbs']:
     html2 = re.sub(r'window\.'+v+r'Play=function\(\)\{(\s*)if\(started\)return;',
         'window.'+v+"Play=function(){\\1if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}\\1if(started)return;", html2)
 
-# 9) solo se venden los packs: los bonos sueltos son vitrina del pack que los incluye
+# 9) solo se venden los packs: bundles con miniaturas + precios en moneda local
 solo_packs = '''<script>
 (function(){
   var GRUPOS = { "gold-pc": [0,1,2], "gold-mob": [3,4,5] };
   function cbPack(key){ return document.getElementById("cu-cb-" + key); }
   function cbNum(i){ return document.getElementById("cu-cb" + i); }
 
-  function leer(sel){ var e = document.querySelector(sel); return e ? (parseFloat(e.textContent.replace(/[^0-9.]/g, "")) || 0) : 0; }
+  /* ── conversion de moneda por pais ── */
+  function fmtMoney(usd){
+    return (window.CU_FX && window.CU_FX.fmt) ? window.CU_FX.fmt(usd) : "$" + usd.toFixed(2);
+  }
+  function leer(sel){
+    var e = document.querySelector(sel); if(!e) return 0;
+    if(e.dataset && e.dataset.usd) return parseFloat(e.dataset.usd) || 0;
+    return parseFloat(e.textContent.replace(/[^0-9.]/g, "")) || 0;
+  }
+  function repintarPrecios(){
+    var els = document.querySelectorAll(".cu-main-price,.cu-main-compare,.cu-bump-price,.cu-bump-compare,.price-item--sale,.price-item--regular");
+    els.forEach(function(e){
+      if(!e.dataset.usd){
+        var v = parseFloat(e.textContent.replace(/[^0-9.]/g, ""));
+        if(!v) return;
+        e.dataset.usd = v;
+      }
+      e.textContent = fmtMoney(parseFloat(e.dataset.usd));
+    });
+    if(window.updateTotals) updateTotals();
+    var btn = document.getElementById("cu-btn");
+    if(btn && !document.getElementById("cu-fx-note") && window.CU_FX){
+      var n = document.createElement("div");
+      n.id = "cu-fx-note";
+      n.style.cssText = "font-size:10.5px;opacity:.65;text-align:center;margin:6px 0 2px;";
+      n.textContent = "💱 Precios aprox. en " + window.CU_FX.cur + " — el valor exacto se confirma al pagar.";
+      btn.parentNode.insertBefore(n, btn);
+    }
+  }
+  (function(){
+    var MONEDAS = { CO:"COP", MX:"MXN", PE:"PEN", CL:"CLP", AR:"ARS", BR:"BRL",
+                    GT:"GTQ", HN:"HNL", NI:"NIO", CR:"CRC", DO:"DOP", PY:"PYG", UY:"UYU", BO:"BOB" };
+    function conRate(cur, rate){
+      if(!rate) return;
+      var dec = rate > 100 ? 0 : 2;
+      var nf;
+      try{ nf = new Intl.NumberFormat("es", {style:"currency", currency:cur, currencyDisplay:"code", maximumFractionDigits:dec, minimumFractionDigits:dec}); }
+      catch(e){ return; }
+      window.CU_FX = { cur: cur, rate: rate, fmt: function(usd){ return nf.format(usd * rate); } };
+      repintarPrecios();
+    }
+    function conPais(cc){
+      var cur = MONEDAS[(cc || "").toUpperCase()];
+      if(!cur) return;
+      fetch("https://open.er-api.com/v6/latest/USD").then(function(r){ return r.json(); })
+        .then(function(fx){ conRate(cur, fx && fx.rates && fx.rates[cur]); }).catch(function(){});
+    }
+    fetch("https://ipapi.co/json/").then(function(r){ return r.json(); })
+      .then(function(g){
+        var cc = g && (g.country_code || g.country);
+        if(cc) conPais(cc);
+        else throw 0;
+      })
+      .catch(function(){
+        fetch("https://api.country.is/").then(function(r){ return r.json(); })
+          .then(function(h){ if(h && h.country) conPais(h.country); }).catch(function(){});
+      });
+  })();
+
   window.updateTotals = function(){
     var total = leer(".cu-main-price"), compare = leer(".cu-main-compare");
     ["gold-pc","gold-mob"].forEach(function(key){
@@ -147,8 +205,8 @@ solo_packs = '''<script>
         compare += parseFloat(cb.getAttribute("data-compare")) || 0;
       }
     });
-    var t = document.getElementById("cu-total");   if(t) t.textContent = "$" + total.toFixed(2);
-    var s = document.getElementById("cu-savings"); if(s) s.textContent = "-$" + (compare - total).toFixed(2);
+    var t = document.getElementById("cu-total");   if(t) t.textContent = fmtMoney(total);
+    var s = document.getElementById("cu-savings"); if(s) s.textContent = "-" + fmtMoney(compare - total);
   };
 
   function setGrupo(key, on){
@@ -184,25 +242,36 @@ solo_packs = '''<script>
     if(pack){ pack.checked = !pack.checked; cuToggleGold(pack, key); }
   };
 
-  /* drawer solo-bundles: esconder bonos sueltos y listar su contenido dentro del pack */
+  /* ── drawer solo-bundles: bonos sueltos ocultos, contenido con miniaturas ── */
   var css = document.createElement("style");
-  css.textContent = "#cu-b0,#cu-b1,#cu-b2,#cu-b3,#cu-b4,#cu-b5{display:none!important}" +
-    ".cu-incluye{margin:10px 0 4px;padding:0;list-style:none;font-size:12.5px;line-height:1.9;text-align:left}" +
-    ".cu-incluye li{display:flex;align-items:center;gap:7px;font-weight:600;letter-spacing:.02em}" +
-    ".cu-incluye li::before{content:\\'+\\';display:inline-block;width:15px;text-align:center;color:#8a8f98;font-weight:800;flex:none}" +
-    ".selected .cu-incluye li::before{content:\\'\\\\2713\\';color:#1db954}";
+  css.textContent =
+    "#cu-b0,#cu-b1,#cu-b2,#cu-b3,#cu-b4,#cu-b5{display:none!important}" +
+    ".cu-incluye{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0 4px;padding:0;list-style:none}" +
+    ".cu-incluye li{position:relative;text-align:center;font-size:10px;font-weight:800;line-height:1.25;letter-spacing:.03em;text-transform:uppercase}" +
+    ".cu-incluye img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:11px;border:2px solid rgba(255,255,255,.18);display:block;margin-bottom:6px;transition:all .25s}" +
+    ".cu-incluye .cu-inc-check{position:absolute;top:5px;right:5px;width:21px;height:21px;border-radius:50%;background:#1db954;color:#fff;font-size:12px;font-weight:900;display:none;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(29,185,84,.9);z-index:2}" +
+    ".selected .cu-incluye img{border-color:#1db954;box-shadow:0 0 14px rgba(29,185,84,.55)}" +
+    ".selected .cu-incluye .cu-inc-check{display:flex}";
   document.head.appendChild(css);
 
-  function tituloDe(i){
-    var c = document.getElementById("cu-b" + i); if(!c) return "";
-    var t = c.querySelector(".cu-bump-title"); return t ? t.textContent.trim() : "";
+  function datosDe(i){
+    var c = document.getElementById("cu-b" + i); if(!c) return null;
+    var t = c.querySelector(".cu-bump-title");
+    var img = c.querySelector(".cu-bump-img");
+    return { nombre: t ? t.textContent.trim() : "", src: img ? img.getAttribute("src") : "" };
   }
   [["gold-pc",[0,1,2]],["gold-mob",[3,4,5]]].forEach(function(par){
     var card = document.getElementById("cu-b-" + par[0]); if(!card) return;
     if(card.querySelector(".cu-incluye")) return;
     var ul = document.createElement("ul"); ul.className = "cu-incluye";
     par[1].forEach(function(i){
-      var li = document.createElement("li"); li.textContent = tituloDe(i); ul.appendChild(li);
+      var d = datosDe(i); if(!d) return;
+      var li = document.createElement("li");
+      var chk = document.createElement("span"); chk.className = "cu-inc-check"; chk.textContent = "✓";
+      li.appendChild(chk);
+      if(d.src){ var im = document.createElement("img"); im.src = d.src; im.alt = d.nombre; im.loading = "lazy"; li.appendChild(im); }
+      var nm = document.createElement("span"); nm.textContent = d.nombre; li.appendChild(nm);
+      ul.appendChild(li);
     });
     var foot = card.querySelector(".cu-bump-footer");
     card.insertBefore(ul, foot || null);
