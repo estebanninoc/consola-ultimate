@@ -40,8 +40,8 @@ jobs:
       - name: Construir index.html desde la página original
         run: python scripts/construir.py
 
-      - name: Precios en moneda local
-        run: python scripts/moneda.py
+      - name: Post-proceso
+        run: python scripts/post.py
 
       - name: Guardar todo en el repositorio
         run: |
