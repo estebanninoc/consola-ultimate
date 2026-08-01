@@ -286,24 +286,6 @@ solo_packs = '''<script>
     card.insertBefore(ul, foot || null);
   });
 
-  /* widget de Hotmart: el checkout se abre ENCIMA de la landing, sin salir */
-  (function(){
-    try{
-      var a = document.createElement("a");
-      a.id = "cu-hm-widget"; a.className = "hotmart-fb";
-      a.href = (LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "#";
-      a.style.cssText = "position:absolute;left:-9999px;top:0;";
-      document.body.appendChild(a);
-      var sc = document.createElement("script");
-      sc.src = "https://static.hotmart.com/checkout/widget.min.js";
-      sc.onload = function(){ window.CU_WIDGET_OK = true; };
-      document.head.appendChild(sc);
-      var ln = document.createElement("link");
-      ln.rel = "stylesheet"; ln.href = "https://static.hotmart.com/css/hotmart-fb.min.css";
-      document.head.appendChild(ln);
-    }catch(e){}
-  })();
-
   window.cuGoCheckout = function(){
     var keys = ["principal"];
     ["gold-pc","gold-mob"].forEach(function(key){
@@ -318,12 +300,6 @@ solo_packs = '''<script>
       return;
     }
     link += (link.indexOf("?") > -1 ? "&" : "?") + "sck=" + encodeURIComponent(combo);
-    var w = document.getElementById("cu-hm-widget");
-    if(w && window.CU_WIDGET_OK){
-      w.setAttribute("href", link);
-      w.click();
-      return;
-    }
     window.location.href = link;
   };
 })();
