@@ -20,8 +20,9 @@ import subprocess
 import sys
 
 PASOS = [
-    'scripts/moneda.py',   # precios en moneda local, instantaneos
-    'scripts/meta.py',     # Meta Pixel + atribucion de anuncios
+    'scripts/moneda.py',    # precios en moneda local, instantaneos
+    'scripts/carrito.py',   # el TOTAL del carrito tambien en moneda local
+    'scripts/meta.py',      # Meta Pixel + atribucion de anuncios
 ]
 
 
