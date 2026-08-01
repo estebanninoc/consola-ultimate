@@ -40,6 +40,9 @@ jobs:
       - name: Construir index.html desde la página original
         run: python scripts/construir.py
 
+      - name: Post-proceso
+        run: python scripts/post.py
+
       - name: Guardar todo en el repositorio
         run: |
           git config user.name "github-actions[bot]"
