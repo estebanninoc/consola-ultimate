@@ -184,6 +184,30 @@ solo_packs = '''<script>
     if(pack){ pack.checked = !pack.checked; cuToggleGold(pack, key); }
   };
 
+  /* drawer solo-bundles: esconder bonos sueltos y listar su contenido dentro del pack */
+  var css = document.createElement("style");
+  css.textContent = "#cu-b0,#cu-b1,#cu-b2,#cu-b3,#cu-b4,#cu-b5{display:none!important}" +
+    ".cu-incluye{margin:10px 0 4px;padding:0;list-style:none;font-size:12.5px;line-height:1.9;text-align:left}" +
+    ".cu-incluye li{display:flex;align-items:center;gap:7px;font-weight:600;letter-spacing:.02em}" +
+    ".cu-incluye li::before{content:\\'+\\';display:inline-block;width:15px;text-align:center;color:#8a8f98;font-weight:800;flex:none}" +
+    ".selected .cu-incluye li::before{content:\\'\\\\2713\\';color:#1db954}";
+  document.head.appendChild(css);
+
+  function tituloDe(i){
+    var c = document.getElementById("cu-b" + i); if(!c) return "";
+    var t = c.querySelector(".cu-bump-title"); return t ? t.textContent.trim() : "";
+  }
+  [["gold-pc",[0,1,2]],["gold-mob",[3,4,5]]].forEach(function(par){
+    var card = document.getElementById("cu-b-" + par[0]); if(!card) return;
+    if(card.querySelector(".cu-incluye")) return;
+    var ul = document.createElement("ul"); ul.className = "cu-incluye";
+    par[1].forEach(function(i){
+      var li = document.createElement("li"); li.textContent = tituloDe(i); ul.appendChild(li);
+    });
+    var foot = card.querySelector(".cu-bump-footer");
+    card.insertBefore(ul, foot || null);
+  });
+
   window.cuGoCheckout = function(){
     var keys = ["principal"];
     ["gold-pc","gold-mob"].forEach(function(key){
