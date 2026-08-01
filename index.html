@@ -378,16 +378,16 @@
 <link href="assets/component-cart-items.css" media="print" onload="this.media='all'" rel="stylesheet"/>
 
 <link href="assets/component-predictive-search.css" media="print" onload="this.media='all'" rel="stylesheet"/>
-<!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
-<!-- END app block --><!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
+<!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
 
+<!-- END app block --><!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
 <!-- END app block --><link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch"/>
 
 
 
 
 
-<meta content="18634fc8-6057-4022-81d0-e7de8613c5d6" name="shopify-y"/>
+<meta content="83bdd5cc-234f-4fc0-bc7e-9ec33d9c45cf" name="shopify-y"/>
 <script>
 /* ═════════════════════════════════════════════════════════════
    ⚙️ ESTEBAN: PEGA AQUÍ TUS LINKS DE PAGO ⚙️
@@ -6237,7 +6237,65 @@ function cuFaqToggle(btn) {
   function cbPack(key){ return document.getElementById("cu-cb-" + key); }
   function cbNum(i){ return document.getElementById("cu-cb" + i); }
 
-  function leer(sel){ var e = document.querySelector(sel); return e ? (parseFloat(e.textContent.replace(/[^0-9.]/g, "")) || 0) : 0; }
+  /* ── conversion de moneda por pais ── */
+  function fmtMoney(usd){
+    return (window.CU_FX && window.CU_FX.fmt) ? window.CU_FX.fmt(usd) : "$" + usd.toFixed(2);
+  }
+  function leer(sel){
+    var e = document.querySelector(sel); if(!e) return 0;
+    if(e.dataset && e.dataset.usd) return parseFloat(e.dataset.usd) || 0;
+    return parseFloat(e.textContent.replace(/[^0-9.]/g, "")) || 0;
+  }
+  function repintarPrecios(){
+    var els = document.querySelectorAll(".cu-main-price,.cu-main-compare,.cu-bump-price,.cu-bump-compare,.price-item--sale,.price-item--regular");
+    els.forEach(function(e){
+      if(!e.dataset.usd){
+        var v = parseFloat(e.textContent.replace(/[^0-9.]/g, ""));
+        if(!v) return;
+        e.dataset.usd = v;
+      }
+      e.textContent = fmtMoney(parseFloat(e.dataset.usd));
+    });
+    if(window.updateTotals) updateTotals();
+    var btn = document.getElementById("cu-btn");
+    if(btn && !document.getElementById("cu-fx-note") && window.CU_FX){
+      var n = document.createElement("div");
+      n.id = "cu-fx-note";
+      n.style.cssText = "font-size:10.5px;opacity:.65;text-align:center;margin:6px 0 2px;";
+      n.textContent = "💱 Precios aprox. en " + window.CU_FX.cur + " — el valor exacto se confirma al pagar.";
+      btn.parentNode.insertBefore(n, btn);
+    }
+  }
+  (function(){
+    var MONEDAS = { CO:"COP", MX:"MXN", PE:"PEN", CL:"CLP", AR:"ARS", BR:"BRL",
+                    GT:"GTQ", HN:"HNL", NI:"NIO", CR:"CRC", DO:"DOP", PY:"PYG", UY:"UYU", BO:"BOB" };
+    function conRate(cur, rate){
+      if(!rate) return;
+      var dec = rate > 100 ? 0 : 2;
+      var nf;
+      try{ nf = new Intl.NumberFormat("es", {style:"currency", currency:cur, currencyDisplay:"code", maximumFractionDigits:dec, minimumFractionDigits:dec}); }
+      catch(e){ return; }
+      window.CU_FX = { cur: cur, rate: rate, fmt: function(usd){ return nf.format(usd * rate); } };
+      repintarPrecios();
+    }
+    function conPais(cc){
+      var cur = MONEDAS[(cc || "").toUpperCase()];
+      if(!cur) return;
+      fetch("https://open.er-api.com/v6/latest/USD").then(function(r){ return r.json(); })
+        .then(function(fx){ conRate(cur, fx && fx.rates && fx.rates[cur]); }).catch(function(){});
+    }
+    fetch("https://ipapi.co/json/").then(function(r){ return r.json(); })
+      .then(function(g){
+        var cc = g && (g.country_code || g.country);
+        if(cc) conPais(cc);
+        else throw 0;
+      })
+      .catch(function(){
+        fetch("https://api.country.is/").then(function(r){ return r.json(); })
+          .then(function(h){ if(h && h.country) conPais(h.country); }).catch(function(){});
+      });
+  })();
+
   window.updateTotals = function(){
     var total = leer(".cu-main-price"), compare = leer(".cu-main-compare");
     ["gold-pc","gold-mob"].forEach(function(key){
@@ -6247,8 +6305,8 @@ function cuFaqToggle(btn) {
         compare += parseFloat(cb.getAttribute("data-compare")) || 0;
       }
     });
-    var t = document.getElementById("cu-total");   if(t) t.textContent = "$" + total.toFixed(2);
-    var s = document.getElementById("cu-savings"); if(s) s.textContent = "-$" + (compare - total).toFixed(2);
+    var t = document.getElementById("cu-total");   if(t) t.textContent = fmtMoney(total);
+    var s = document.getElementById("cu-savings"); if(s) s.textContent = "-" + fmtMoney(compare - total);
   };
 
   function setGrupo(key, on){
@@ -6283,6 +6341,41 @@ function cuFaqToggle(btn) {
     cb.checked = false;
     if(pack){ pack.checked = !pack.checked; cuToggleGold(pack, key); }
   };
+
+  /* ── drawer solo-bundles: bonos sueltos ocultos, contenido con miniaturas ── */
+  var css = document.createElement("style");
+  css.textContent =
+    "#cu-b0,#cu-b1,#cu-b2,#cu-b3,#cu-b4,#cu-b5{display:none!important}" +
+    ".cu-incluye{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0 4px;padding:0;list-style:none}" +
+    ".cu-incluye li{position:relative;text-align:center;font-size:10px;font-weight:800;line-height:1.25;letter-spacing:.03em;text-transform:uppercase}" +
+    ".cu-incluye img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:11px;border:2px solid rgba(255,255,255,.18);display:block;margin-bottom:6px;transition:all .25s}" +
+    ".cu-incluye .cu-inc-check{position:absolute;top:5px;right:5px;width:21px;height:21px;border-radius:50%;background:#1db954;color:#fff;font-size:12px;font-weight:900;display:none;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(29,185,84,.9);z-index:2}" +
+    ".selected .cu-incluye img{border-color:#1db954;box-shadow:0 0 14px rgba(29,185,84,.55)}" +
+    ".selected .cu-incluye .cu-inc-check{display:flex}";
+  document.head.appendChild(css);
+
+  function datosDe(i){
+    var c = document.getElementById("cu-b" + i); if(!c) return null;
+    var t = c.querySelector(".cu-bump-title");
+    var img = c.querySelector(".cu-bump-img");
+    return { nombre: t ? t.textContent.trim() : "", src: img ? img.getAttribute("src") : "" };
+  }
+  [["gold-pc",[0,1,2]],["gold-mob",[3,4,5]]].forEach(function(par){
+    var card = document.getElementById("cu-b-" + par[0]); if(!card) return;
+    if(card.querySelector(".cu-incluye")) return;
+    var ul = document.createElement("ul"); ul.className = "cu-incluye";
+    par[1].forEach(function(i){
+      var d = datosDe(i); if(!d) return;
+      var li = document.createElement("li");
+      var chk = document.createElement("span"); chk.className = "cu-inc-check"; chk.textContent = "✓";
+      li.appendChild(chk);
+      if(d.src){ var im = document.createElement("img"); im.src = d.src; im.alt = d.nombre; im.loading = "lazy"; li.appendChild(im); }
+      var nm = document.createElement("span"); nm.textContent = d.nombre; li.appendChild(nm);
+      ul.appendChild(li);
+    });
+    var foot = card.querySelector(".cu-bump-footer");
+    card.insertBefore(ul, foot || null);
+  });
 
   window.cuGoCheckout = function(){
     var keys = ["principal"];
