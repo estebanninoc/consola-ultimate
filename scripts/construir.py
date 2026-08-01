@@ -83,12 +83,12 @@ var LINKS_COMBO = {
   "principal+0":        "https://pay.hotmart.com/D106973843E?off=5smsap7b",   /* MC + Juegos PS4          — $62.98 */
   "principal+1":        "https://pay.hotmart.com/R106973896Y?off=b50zd6k6",   /* MC + Juegos PS5          — $64.59 */
   "principal+2":        "https://pay.hotmart.com/Y106973920J?off=2795atqv",   /* MC + Juegos Xbox         — $60.59 */
-  "principal+gold-pc":  "https://pay.hotmart.com/G106973941A?off=464flaar",   /* MC + Pack Juegos         — $68.99 */
+  "principal+gold-pc":  "https://pay.hotmart.com/G106973941A?off=464flaar&checkoutMode=10",   /* MC + Pack Juegos         — $68.99 */
   "principal+3":        "https://pay.hotmart.com/P106973964I?off=lb04939l",   /* MC + AAA                 — $51.79 */
   "principal+4":        "https://pay.hotmart.com/E106973981Q?off=doflyrog",   /* MC + BBB                 — $54.19 */
   "principal+5":        "https://pay.hotmart.com/A106974004P?off=nbamy7si",   /* MC + CCC                 — $52.59 */
-  "principal+gold-mob": "https://pay.hotmart.com/S106974036W?off=tgm2hq2f",   /* MC + Pack a+b+c          — $70.19 */
-  "principal+gold-pc+gold-mob": "https://pay.hotmart.com/T106974063L?off=wobycom3"   /* MC TODO       — $104.19 */
+  "principal+gold-mob": "https://pay.hotmart.com/S106974036W?off=tgm2hq2f&checkoutMode=10",   /* MC + Pack a+b+c          — $70.19 */
+  "principal+gold-pc+gold-mob": "https://pay.hotmart.com/T106974063L?off=wobycom3&checkoutMode=10"   /* MC TODO       — $104.19 */
 };
 </script>'''
 html2 = html2.replace('</head>', config + '\n</head>', 1)
@@ -286,6 +286,24 @@ solo_packs = '''<script>
     card.insertBefore(ul, foot || null);
   });
 
+  /* widget de Hotmart: el checkout se abre ENCIMA de la landing, sin salir */
+  (function(){
+    try{
+      var a = document.createElement("a");
+      a.id = "cu-hm-widget"; a.className = "hotmart-fb";
+      a.href = (LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "#";
+      a.style.cssText = "position:absolute;left:-9999px;top:0;";
+      document.body.appendChild(a);
+      var sc = document.createElement("script");
+      sc.src = "https://static.hotmart.com/checkout/widget.min.js";
+      sc.onload = function(){ window.CU_WIDGET_OK = true; };
+      document.head.appendChild(sc);
+      var ln = document.createElement("link");
+      ln.rel = "stylesheet"; ln.href = "https://static.hotmart.com/css/hotmart-fb.min.css";
+      document.head.appendChild(ln);
+    }catch(e){}
+  })();
+
   window.cuGoCheckout = function(){
     var keys = ["principal"];
     ["gold-pc","gold-mob"].forEach(function(key){
@@ -300,6 +318,12 @@ solo_packs = '''<script>
       return;
     }
     link += (link.indexOf("?") > -1 ? "&" : "?") + "sck=" + encodeURIComponent(combo);
+    var w = document.getElementById("cu-hm-widget");
+    if(w && window.CU_WIDGET_OK){
+      w.setAttribute("href", link);
+      w.click();
+      return;
+    }
     window.location.href = link;
   };
 })();
