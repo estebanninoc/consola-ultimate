@@ -72,7 +72,14 @@ var LINKS_DE_PAGO = {
   b5: "https://pay.hotmart.com/M106971389O?off=fdqkpr2j",   /* PS2 MOBILE               — $17.60 */
   "gold-mob": "https://pay.hotmart.com/Y106972171P?off=7l2spaxx"   /* PACK SUPREMO MOBILE      — $35.20 */
 };
-var LINKS_COMBO = {};  /* opcional: "principal+b0": "https://..." */
+/* LINKS_COMBO — rutas por combinación del carrito de la landing.
+   La clave se arma con "principal" + los bonos marcados, en el orden del drawer:
+     0 = Juegos PS4 · 1 = Juegos PS5 · 2 = Juegos Xbox · gold-pc = Ultimate Leyenda (Pack Juegos)
+     3 = Retro Gaming Mobile · 4 = Ultra Retro Mobile · 5 = PS2 Mobile · gold-mob = Pack Supremo
+   Ej.: "principal+0+2": "https://pay.hotmart.com/…"
+   Si la combinación no está aquí, va al checkout del principal (que muestra
+   los 8 bonos para replicar la selección) etiquetado con sck=<combinación>. */
+var LINKS_COMBO = {};
 </script>'''
 html2 = html2.replace('</head>', config + '\n</head>', 1)
 
@@ -83,13 +90,16 @@ nuevo = '''window.cuGoCheckout = function(){
   document.querySelectorAll('#cu-drawer .cu-bump-cb:checked').forEach(function(cb){
     keys.push(cb.id.replace('cu-cb-','').replace('cu-cb',''));
   });
-  var link = (LINKS_COMBO && LINKS_COMBO[keys.join('+')]) || LINKS_DE_PAGO.principal || '';
+  var combo = keys.join('+');
+  var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || '';
   if(!link){
     var btn = document.getElementById('cu-btn'); var prev = btn.innerHTML;
     btn.innerHTML = '⚠️ Configura tu link de pago';
     setTimeout(function(){ btn.innerHTML = prev; }, 3000);
     return;
   }
+  /* etiqueta la venta en Hotmart con lo seleccionado en la landing (sck) */
+  link += (link.indexOf('?') > -1 ? '&' : '?') + 'sck=' + encodeURIComponent(combo);
   window.location.href = link;
 };'''
 html2 = html2[:m.start()] + nuevo + html2[m.end():]
