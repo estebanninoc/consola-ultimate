@@ -306,6 +306,30 @@ solo_packs = '''<script>
 </script>'''
 html2 = html2.replace('</body>', solo_packs + '\n</body>', 1)
 
+# 10) tono de verde de la marca: todos los verdes al matiz 135 (verde LED de la foto)
+import colorsys
+HUE_VERDE = 135 / 360.0
+def _verde_hex(m):
+    hx = m.group(1)
+    if len(hx) == 3:
+        r, g, b = [int(c*2, 16) for c in hx]
+    else:
+        r, g, b = int(hx[0:2], 16), int(hx[2:4], 16), int(hx[4:6], 16)
+    h, l, s = colorsys.rgb_to_hls(r/255, g/255, b/255)
+    if 118/360 <= h <= 172/360 and s > 0.12:
+        r2, g2, b2 = [round(x*255) for x in colorsys.hls_to_rgb(HUE_VERDE, l, s)]
+        return '#%02x%02x%02x' % (r2, g2, b2)
+    return m.group(0)
+def _verde_rgb(m):
+    r, g, b = int(m.group(2)), int(m.group(4)), int(m.group(6))
+    h, l, s = colorsys.rgb_to_hls(r/255, g/255, b/255)
+    if 118/360 <= h <= 172/360 and s > 0.12:
+        r2, g2, b2 = [round(x*255) for x in colorsys.hls_to_rgb(HUE_VERDE, l, s)]
+        return m.group(1) + str(r2) + m.group(3) + str(g2) + m.group(5) + str(b2)
+    return m.group(0)
+html2 = re.sub(r'#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b', _verde_hex, html2)
+html2 = re.sub(r'(rgba?\(\s*)(\d+)(\s*,\s*)(\d+)(\s*,\s*)(\d+)', _verde_rgb, html2)
+
 open('index.html', 'w', encoding='utf-8').write(html2)
 print('index.html generado:', len(html2), 'bytes')
 assert 'assets/' in html2
