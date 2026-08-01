@@ -378,16 +378,16 @@
 <link href="assets/component-cart-items.css" media="print" onload="this.media='all'" rel="stylesheet"/>
 
 <link href="assets/component-predictive-search.css" media="print" onload="this.media='all'" rel="stylesheet"/>
-<!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
+<!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
+<!-- END app block --><!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
 
-<!-- END app block --><!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
 <!-- END app block --><link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch"/>
 
 
 
 
 
-<meta content="00000000-0000-0000-0000-000000000000" name="shopify-y"/>
+<meta content="d4178e38-1853-4350-a03e-d106c0f3ab8d" name="shopify-y"/>
 <script>
 /* ═════════════════════════════════════════════════════════════
    ⚙️ ESTEBAN: PEGA AQUÍ TUS LINKS DE PAGO ⚙️
@@ -6386,24 +6386,6 @@ function cuFaqToggle(btn) {
     card.insertBefore(ul, foot || null);
   });
 
-  /* widget de Hotmart: el checkout se abre ENCIMA de la landing, sin salir */
-  (function(){
-    try{
-      var a = document.createElement("a");
-      a.id = "cu-hm-widget"; a.className = "hotmart-fb";
-      a.href = (LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "#";
-      a.style.cssText = "position:absolute;left:-9999px;top:0;";
-      document.body.appendChild(a);
-      var sc = document.createElement("script");
-      sc.src = "https://static.hotmart.com/checkout/widget.min.js";
-      sc.onload = function(){ window.CU_WIDGET_OK = true; };
-      document.head.appendChild(sc);
-      var ln = document.createElement("link");
-      ln.rel = "stylesheet"; ln.href = "https://static.hotmart.com/css/hotmart-fb.min.css";
-      document.head.appendChild(ln);
-    }catch(e){}
-  })();
-
   window.cuGoCheckout = function(){
     var keys = ["principal"];
     ["gold-pc","gold-mob"].forEach(function(key){
@@ -6418,12 +6400,6 @@ function cuFaqToggle(btn) {
       return;
     }
     link += (link.indexOf("?") > -1 ? "&" : "?") + "sck=" + encodeURIComponent(combo);
-    var w = document.getElementById("cu-hm-widget");
-    if(w && window.CU_WIDGET_OK){
-      w.setAttribute("href", link);
-      w.click();
-      return;
-    }
     window.location.href = link;
   };
 })();
