@@ -25,8 +25,12 @@ ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 MARCA = 'CU-META v1'
 
 # ⚙️ ─────────────────────────────────────────────────────────────
-PIXEL_ID = os.environ.get('META_PIXEL_ID', '').strip() or ''
-#    Ejemplo: PIXEL_ID = '1234567890123456'
+PIXEL_ID = os.environ.get('META_PIXEL_ID', '').strip() or '1076125914843182'
+#    Pixel "The Game Box" · cuenta publicitaria GAMEBOX (1569117264652457)
+#    dentro del portafolio EL MEGA BAZAR. Creado con la API de conversiones
+#    activada. El MISMO id va tambien en Hotmart (Herramientas > Mostrar
+#    todas > Pixel de seguimiento > Facebook + Instagram) para que llegue
+#    el evento de Compra: la venta ocurre alla, no en la landing.
 # ─────────────────────────────────────────────────────────────────
 
 HEAD_TPL = r'''<script>

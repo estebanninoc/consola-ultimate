@@ -3,9 +3,10 @@
 Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra.
 
 > **Ojo:** `index.html` NO se edita a mano. Lo genera `scripts/construir.py` en
-> cada deploy bajándose la página de Shopify, y después lo reescriben
-> `scripts/moneda.py` y `scripts/meta.py`. Cualquier edición manual del HTML se
-> pierde en el siguiente build.
+> cada deploy bajándose la página de Shopify, y después lo reescribe
+> `scripts/post.py` corriendo, en este orden: `precios.py`, `links.py`,
+> `imagenes.py`, `moneda.py`, `carrito.py`, `meta.py`. Cualquier edición manual
+> del HTML se pierde en el siguiente build.
 
 ---
 
@@ -17,9 +18,46 @@ Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra
       encadenadas. Cobertura LATAM + USA (20 países). Se quitó `ipapi.co`
       (tope de 1000 consultas/día en plan gratuito).
 
-- [x] **Meta Pixel + atribución** — `scripts/meta.py`
+- [x] **La landing nunca más barata que el checkout** — `scripts/moneda.py`
+      Se midió el checkout real de Hotmart país por país: la diferencia llega a
+      +25,9 % en Chile, y viene casi toda del IVA local, no del spread. Por eso
+      hay un factor por moneda (`FACTOR`) en vez de un margen global, y el
+      resultado siempre se redondea hacia arriba.
+
+- [x] **Bug de Argentina** — el navegador renombra `America/Argentina/*` a la
+      forma corta, así que la tabla lista las dos. Sin eso los argentinos veían
+      dólares.
+
+- [x] **Total del carrito en moneda local** — `scripts/carrito.py`
+      El `openCart` viejo capturaba el `updateTotals` en dólares. Ahora se
+      envuelve y repinta al abrir.
+
+- [x] **Precios nuevos y descuento por llevar todo** — `scripts/precios.py`
+      Principal 34,99 (antes 117) · Leyenda 24,99 (antes 85) · Supremo 24,99
+      (antes 88) · los tres juntos 74,99 en vez de 84,97.
+
+- [x] **Imágenes** — `scripts/imagenes.py`
+      PNG pesados a WebP, `srcset` real por ancho, `lazy` + `decoding` después
+      de las primeras 8. Eran 40,8 MB, de los cuales 5 PNG pesaban 22,7 MB.
+
+- [x] **Meta Pixel + atribución en la landing** — `scripts/meta.py`
       PageView, ViewContent, AddToCart e InitiateCheckout. Captura `utm_*`,
       `fbclid` y `gclid` al llegar y los pasa a Hotmart en sus campos `src` y `sck`.
+
+- [x] **Pixel de Meta en Hotmart** — pixel `1076125914843182` ("The Game Box")
+      configurado con evento **Sales made** y envío **vía WEB** en los cuatro
+      productos que vende la landing:
+      `8189092` principal · `8238333` + Leyenda · `8232407` + Supremo Mobile ·
+      `8232421` + Leyenda + Supremo.
+      *Checkout Page Visits* se dejó apagado a propósito: la landing ya dispara
+      `InitiateCheckout` y si no, el evento se contaría dos veces.
+
+- [x] **Checkout con la marca** — producto principal publicado con
+      `checkoutMode=10` y el link real del combo con Leyenda
+      (`P106988065E?off=zes3wsqi`).
+
+- [x] **Dominio de GoDaddy** — registros A al apex + CNAME de `www`,
+      `CNAME` = `the-gamebox.com`.
 
 - [x] **Id duplicado `ctaCheckoutBtn`** — el segundo botón pasó a
       `ctaCheckoutBtn2`. Antes cualquier medición por `getElementById` solo
@@ -29,37 +67,33 @@ Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra
 
 ## Falta — por orden de impacto
 
-- [ ] **Pegar el ID del píxel de Meta**
-      En `scripts/meta.py`, variable `PIXEL_ID`. Mientras esté vacío se instala
-      la atribución pero no el píxel.
+- [ ] **Mergear el PR #16**
+      Trae el `PIXEL_ID` en `scripts/meta.py`. Hasta que no se mergee, la landing
+      sale a producción con el píxel apagado.
 
-- [ ] **Configurar el píxel también en Hotmart**
-      Hotmart → Herramientas → Pixel de Facebook, con el mismo ID. El evento
-      `Purchase` ocurre allá, no en la landing: sin esto Meta no recibe la
-      conversión real y no puede optimizar las campañas.
+- [ ] **Replicar el checkout con marca a los otros tres productos**
+      En el Checkout Builder de Hotmart, "Duplicar a otros productos" desde el
+      principal. Hoy solo el principal y el combo con Leyenda lo tienen.
 
-- [ ] **Verificar el precio real en Hotmart**
-      La página vende a **$39.99** pero el comentario del link `principal` en
-      `construir.py` dice **$34.99**. Uno de los dos está desactualizado.
+- [ ] **Banner del pie del checkout en los combos**
+      Sigue diciendo "MULTI CONSOLA ULTIMATE RETRO™ · +65.000 juegos" también en
+      los productos combinados. Falta una imagen por combo.
+
+- [ ] **Conversion API en Hotmart (opcional pero vale mucho)**
+      El envío quedó solo "vía WEB". La API de Conversiones manda el evento
+      desde el servidor y sobrevive a los bloqueos de iOS y de los bloqueadores.
+      Pide un token que se genera en el Administrador de Eventos de Meta; ese
+      token lo tiene que pegar Esteban, no se maneja por aquí.
 
 - [ ] **Crear ofertas por país en Hotmart y llenar `OFERTAS_PAIS`**
-      Hotmart convierte a moneda local con su propia tasa más un *spread*, así
-      que hoy la landing muestra un número algo menor al del checkout. Con una
-      oferta por país (4 variantes cada una: principal, +gold-pc, +gold-mob,
-      +ambos) el precio de la landing y el del checkout quedan idénticos.
+      Hoy el factor por moneda deja la landing siempre igual o más cara que el
+      checkout, que es lo correcto, pero no idéntica. Con una oferta por país
+      (4 variantes: principal, +leyenda, +supremo, +ambos) los dos números
+      quedan clavados. Empezar por CO, MX y BR.
       La tabla está en `scripts/moneda.py` con un ejemplo comentado.
-      Empezar por CO, MX y BR.
-
-- [ ] **Conectar el dominio de GoDaddy**
-      4 registros A al apex + CNAME para `www`, dominio en Settings → Pages,
-      y activar *Enforce HTTPS* cuando esté disponible.
 
 - [ ] **Barra de compra fija en el scroll**
       La página tiene ~6.600 líneas y el botón de compra sale solo en 2 puntos.
-
-- [ ] **Lazy loading en las imágenes**
-      126 de 160 imágenes cargan sin `loading="lazy"`. En celular con datos
-      móviles retrasa bastante la primera pintura.
 
 - [ ] **Limpiar links muertos y unificar `checkoutMode`**
       6 de los 18 links de Hotmart son inalcanzables (los de bonos sueltos: el
