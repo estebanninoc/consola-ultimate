@@ -21,6 +21,7 @@ import sys
 
 PASOS = [
     'scripts/precios.py',   # precios reales + descuento del pack completo
+    'scripts/links.py',     # links de pago de Hotmart
     'scripts/imagenes.py',  # PNG pesados -> WebP, srcset real, lazy loading
     'scripts/moneda.py',    # precios en moneda local, instantaneos
     'scripts/carrito.py',   # el TOTAL del carrito tambien en moneda local

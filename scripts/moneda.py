@@ -70,9 +70,51 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
     */
   };
 
-  /* Margen sobre la tasa de mercado, para cubrir el spread de Hotmart.
-     1.00 = tasa limpia. Solo aplica cuando NO hay oferta de pais. */
-  var MARGEN = 1.00;
+  /* ─────────────────────────────────────────────────────────────────
+     FACTOR DE HOTMART, medido pais por pais (2 ago 2026)
+
+     Hotmart no convierte con la tasa de mercado: le suma su spread y,
+     en varios paises, el impuesto local. Medido sobre el mismo producto
+     de US$59.98 abriendo el checkout real desde cada pais:
+
+       Pais  Checkout Hotmart   Landing a tasa limpia   Diferencia
+       CO         196.242 COP        192.118 COP          +2,1%
+       PE            214,00 PEN         203,59 PEN        +5,1%
+       BR            337,00 BRL         303,88 BRL       +10,9%
+       AR         103.414 ARS         89.277 ARS         +15,8%  (+ tarifas aparte)
+       MX          1.274,84 MXN       1.040,04 MXN       +22,6%  (IVA incluido)
+       CL          70.061 CLP         55.627 CLP         +25,9%  (IVA incluido)
+
+     O sea que con la tasa limpia la landing se veria hasta 26% MAS BARATA
+     que el checkout — el peor error posible: el cliente hace clic con un
+     precio en la cabeza y se encuentra otro. Por eso cada moneda lleva su
+     propio factor, un poco por encima de lo medido para absorber el
+     movimiento diario de la tasa.
+
+     La regla es: en la landing SIEMPRE igual o un poco mas caro que en el
+     checkout. Que la sorpresa sea a favor del cliente, nunca en contra.
+
+     ⚙️ Conviene volver a medirlo cada tanto: se abre el checkout, se cambia
+     de pais y se compara. Si cambian los impuestos, estos numeros cambian.
+     ───────────────────────────────────────────────────────────────── */
+  var FACTOR = {
+    COP: 1.03,   /* medido 1.021 */
+    PEN: 1.06,   /* medido 1.051 */
+    BRL: 1.12,   /* medido 1.109 */
+    ARS: 1.20,   /* medido 1.158, mas las tarifas que no muestra */
+    MXN: 1.23,   /* medido 1.226 — IVA 16% */
+    CLP: 1.27    /* medido 1.259 — IVA 19% */
+  };
+  /* Para las monedas que no se midieron se usa el peor caso conocido:
+     mas vale verse un poco mas caro que prometer de menos. */
+  var FACTOR_DEF = 1.26;
+
+  /* Redondeo SIEMPRE hacia arriba, nunca hacia abajo: redondear hacia
+     abajo podria dejar la landing por debajo del checkout. */
+  function redondearArriba(v){
+    var paso = v >= 10000 ? 100 : (v >= 1000 ? 10 : (v >= 100 ? 1 : 0.1));
+    return Math.ceil(v / paso) * paso;
+  }
 
   /* huso horario -> pais (LATAM + USA) */
   var TZ2CC = {
@@ -85,6 +127,10 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
     "America/Guatemala":"GT","America/Tegucigalpa":"HN","America/Managua":"NI","America/Costa_Rica":"CR",
     "America/Santo_Domingo":"DO","America/Asuncion":"PY","America/Montevideo":"UY","America/La_Paz":"BO",
     "America/Caracas":"VE","America/Havana":"CU",
+    /* Argentina: el navegador renombra America/Argentina/* a la forma corta,
+       asi que hay que listar las dos. Sin esto los argentinos no ven pesos. */
+    "America/Buenos_Aires":"AR","America/Cordoba":"AR","America/Mendoza":"AR",
+    "America/Rosario":"AR","America/Catamarca":"AR","America/Jujuy":"AR",
     "America/Sao_Paulo":"BR","America/Bahia":"BR","America/Fortaleza":"BR","America/Recife":"BR",
     "America/Belem":"BR","America/Manaus":"BR","America/Cuiaba":"BR","America/Campo_Grande":"BR",
     "America/Porto_Velho":"BR","America/Boa_Vista":"BR","America/Rio_Branco":"BR","America/Maceio":"BR",
@@ -185,7 +231,8 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
       fmt:function(usd){
         var exacto = usa && usa.precios ? usa.precios[String(usd)] : null;
         if(exacto!=null) return sim+nf0.format(exacto)+" "+cur;
-        return sim+nf.format(usd*rate*MARGEN)+" "+cur;
+        var f = FACTOR[cur] || FACTOR_DEF;
+        return sim+nf.format(redondearArriba(usd*rate*f))+" "+cur;
       }
     };
     repintar();
