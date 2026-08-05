@@ -12,6 +12,25 @@ Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra
 
 ## Hecho
 
+- [x] **PR #16 mergeado (2026-08-02)** — el `PIXEL_ID` ya esta en
+      `scripts/meta.py`; el pixel sale activo en cada build.
+
+- [x] **Checkout migrado de Hotmart a STRIPE con moneda local exacta (2026-08-05)**
+      Los 4 combos venden ahora por Stripe Payment Links (cuenta
+      `acct_1RyEj5CraKX72R2s`, liquida en USD):
+      principal $34.99 · +Leyenda $59.98 · +Supremo $59.98 · todo $74.99.
+      Cada Price lleva `currency_options` con montos FIJOS en 14 monedas de
+      LATAM (COP, MXN, BRL, PEN, CLP, ARS, UYU, GTQ, HNL, NIO, CRC, DOP,
+      PYG, BOB) y el checkout los presenta por IP. `scripts/moneda.py`
+      (CU-FX v4) tiene una COPIA de esa tabla (`STRIPE_PRECIOS`): la landing
+      muestra EXACTAMENTE el numero del checkout — se acabo el factor de
+      Hotmart y el riesgo de que el checkout salga mas caro. VE/CU quedan
+      como aproximado (Stripe no soporta VES/CUP; alli cobra USD).
+      Atribucion: `scripts/meta.py` pasa combo+campana+anuncio+origen en
+      `client_reference_id` del Payment Link (visible en el Dashboard).
+      ⚠️ Si se cambia un precio: actualizar Stripe y `STRIPE_PRECIOS` en el
+      mismo commit.
+
 - [x] **Precio en moneda local instantáneo** — `scripts/moneda.py`
       País por huso horario (sin red), tasa cacheada 6 h, tabla de respaldo si la
       API cae. Antes había 0,3–2 s de dólares en pantalla por dos llamadas
@@ -67,40 +86,41 @@ Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra
 
 ## Falta — por orden de impacto
 
-- [ ] **Mergear el PR #16**
-      Trae el `PIXEL_ID` en `scripts/meta.py`. Hasta que no se mergee, la landing
-      sale a producción con el píxel apagado.
+- [ ] **Entrega digital post-pago (Stripe no entrega archivos)**
+      Hotmart entregaba el producto solo; Stripe no. Hay que apuntar el
+      `after_completion` de los 4 Payment Links a una pagina `/gracias` en
+      the-gamebox.com (o a Helios, que ya entrega los productos del circuito
+      PDFs) que de acceso a la multiconsola y los packs. HOY el comprador
+      paga y ve solo la confirmacion generica de Stripe.
 
-- [ ] **Replicar el checkout con marca a los otros tres productos**
-      En el Checkout Builder de Hotmart, "Duplicar a otros productos" desde el
-      principal. Hoy solo el principal y el combo con Leyenda lo tienen.
+- [ ] **Evento Purchase de Meta con Stripe**
+      Antes lo mandaba Hotmart. Ahora: dispararlo en la pagina `/gracias`
+      (fbq Purchase) y/o con la Conversions API desde el webhook
+      `checkout.session.completed` de Stripe. Hasta entonces el embudo de
+      Meta llega solo hasta InitiateCheckout.
 
-- [ ] **Banner del pie del checkout en los combos**
-      Sigue diciendo "MULTI CONSOLA ULTIMATE RETRO™ · +65.000 juegos" también en
-      los productos combinados. Falta una imagen por combo.
-
-- [ ] **Conversion API en Hotmart (opcional pero vale mucho)**
-      El envío quedó solo "vía WEB". La API de Conversiones manda el evento
-      desde el servidor y sobrevive a los bloqueos de iOS y de los bloqueadores.
-      Pide un token que se genera en el Administrador de Eventos de Meta; ese
-      token lo tiene que pegar Esteban, no se maneja por aquí.
-
-- [ ] **Crear ofertas por país en Hotmart y llenar `OFERTAS_PAIS`**
-      Hoy el factor por moneda deja la landing siempre igual o más cara que el
-      checkout, que es lo correcto, pero no idéntica. Con una oferta por país
-      (4 variantes: principal, +leyenda, +supremo, +ambos) los dos números
-      quedan clavados. Empezar por CO, MX y BR.
-      La tabla está en `scripts/moneda.py` con un ejemplo comentado.
+- [ ] **Refrescar STRIPE_PRECIOS cada tanto**
+      Los montos locales son fijos (generados 2026-08-05, tasa x1.045 de
+      colchon; ARS x1.12). Si una moneda se devalua fuerte (ARS...), Esteban
+      cobra menos USD por venta. Revisar mensual: comparar tasa del dia vs
+      la implicita en la tabla y regenerar (Stripe + moneda.py juntos).
 
 - [ ] **Barra de compra fija en el scroll**
-      La página tiene ~6.600 líneas y el botón de compra sale solo en 2 puntos.
+      La pagina tiene ~6.600 lineas y el boton de compra sale solo en 2 puntos.
 
-- [ ] **Limpiar links muertos y unificar `checkoutMode`**
-      6 de los 18 links de Hotmart son inalcanzables (los de bonos sueltos: el
-      carrito ahora fuerza packs completos). `checkoutMode=10` está solo en 4 de
-      los 18, así que la experiencia de checkout cambia según el combo. Además
-      viajan ~120 líneas de una versión vieja del carrito que se sobrescribe.
+- [ ] **Limpiar links muertos de Hotmart**
+      Quedan ~16 links de pay.hotmart.com en tablas del HTML que ya no son
+      alcanzables (bonos sueltos y combos numericos; el carrito fuerza packs
+      completos y los 4 combos reales ya apuntan a Stripe). Limpiarlos en
+      construir.py o dejarlos morir con la proxima regeneracion.
 
 - [ ] **Permiso de Workflows para el conector de GitHub**
-      Sin él, `.github/workflows/desplegar.yml` hay que editarlo a mano cada vez
+      Sin el, `.github/workflows/desplegar.yml` hay que editarlo a mano cada vez
       que se agrega un paso al build.
+
+### Cerrados por la migracion a Stripe (ya no aplican)
+- ~~Replicar el checkout con marca a los otros tres productos (Hotmart)~~
+- ~~Banner del pie del checkout en los combos (Hotmart)~~
+- ~~Conversion API en Hotmart~~ → reemplazado por el punto de Purchase con Stripe
+- ~~Crear ofertas por pais en Hotmart y llenar `OFERTAS_PAIS`~~ → resuelto
+  mejor con `currency_options` + `STRIPE_PRECIOS` (identico por construccion)
