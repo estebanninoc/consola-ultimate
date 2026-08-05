@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex"/>
+<title>¡COMPRA CONFIRMADA! — The Game Box</title>
+<style>
+  :root{
+    --negro:#0a0f0a; --neon:#3cff91; --neon2:#00ff82; --verde:#1db954; --gris:#9aa0a6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:#000;
+    color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px;
+    overflow-x:hidden;position:relative;
+  }
+  /* scanlines retro */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:3;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);
+  }
+  /* glow de fondo */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(60,255,145,.10),transparent 70%);
+  }
+  .caja{
+    position:relative;z-index:2;max-width:640px;width:100%;text-align:center;
+    background:var(--negro);
+    border:1px solid rgba(60,255,145,.35);
+    border-radius:18px;
+    box-shadow:0 0 32px rgba(60,255,145,.22), inset 0 0 60px rgba(60,255,145,.05);
+    padding:48px 32px 40px;
+  }
+  .joystick{font-size:64px;line-height:1;filter:drop-shadow(0 0 14px rgba(60,255,145,.8));animation:flotar 2.6s ease-in-out infinite}
+  @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .check{
+    display:inline-block;margin:18px 0 6px;padding:7px 18px;border-radius:999px;
+    border:1px solid var(--neon);color:var(--neon);
+    font-size:12px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;
+    text-shadow:0 0 12px rgba(60,255,145,.9);
+    animation:parpadeo 1.6s steps(2) infinite;
+  }
+  @keyframes parpadeo{50%{opacity:.55}}
+  h1{
+    font-size:clamp(30px,6vw,46px);font-weight:900;text-transform:uppercase;
+    letter-spacing:1.5px;line-height:1.12;margin:10px 0 14px;
+    color:var(--neon);
+    text-shadow:0 0 8px rgba(60,255,145,.95),0 0 28px rgba(60,255,145,.55),0 0 60px rgba(60,255,145,.3);
+  }
+  h1 span{color:#fff;text-shadow:0 0 14px rgba(255,255,255,.6)}
+  .sub{font-size:18px;color:#e8fff2;font-weight:700;margin-bottom:26px}
+  .sub b{color:var(--neon2)}
+  .pasos{
+    text-align:left;margin:0 auto 26px;max-width:460px;
+    border:1px dashed rgba(60,255,145,.4);border-radius:12px;padding:20px 22px;
+    background:rgba(60,255,145,.04);
+  }
+  .paso{display:flex;gap:14px;align-items:flex-start;padding:9px 0;font-size:15px;color:#dfe6e2}
+  .paso .n{
+    flex:0 0 26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+    background:var(--neon);color:#02120a;font-weight:900;font-size:14px;
+    box-shadow:0 0 12px rgba(60,255,145,.7);
+  }
+  .paso b{color:#fff}
+  .nota{font-size:13.5px;color:var(--gris);margin-bottom:26px}
+  .nota a{color:var(--neon);font-weight:800;text-decoration:none}
+  .btn{
+    display:inline-block;padding:15px 34px;border-radius:12px;
+    background:var(--neon);color:#02120a;font-weight:900;font-size:15px;
+    letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;
+    box-shadow:0 0 22px rgba(60,255,145,.65);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(60,255,145,.9)}
+  .marca{margin-top:26px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#556158}
+</style>
+</head>
+<body>
+  <div class="caja">
+    <div class="joystick">🕹️</div>
+    <div class="check">✓ Pago confirmado</div>
+    <h1>¡Gracias, <span>crack</span>!<br/>Ya eres de la familia</h1>
+    <p class="sub">📧 <b>TODO está en tu correo:</b> tu multiconsola, tus packs y las instrucciones de instalación. Te lo acabamos de enviar.</p>
+
+    <div class="pasos">
+      <div class="paso"><div class="n">1</div><div><b>Abre tu correo</b> — el mismo con el que pagaste.</div></div>
+      <div class="paso"><div class="n">2</div><div>¿No aparece? Revisa <b>Spam</b> y <b>Promociones</b> (a veces se esconde ahí).</div></div>
+      <div class="paso"><div class="n">3</div><div>Sigue las instrucciones y en <b>5 minutos</b> estás jugando. 🎮</div></div>
+    </div>
+
+    <p class="nota">¿No te llegó en 15 minutos? Escríbenos por WhatsApp y te lo reenviamos al instante:<br/>
+      <a href="https://wa.me/18575295509?text=Hola!%20Acabo%20de%20comprar%20la%20multiconsola%20y%20no%20me%20ha%20llegado%20el%20correo">📲 Soporte por WhatsApp</a>
+    </p>
+
+    <a class="btn" href="https://the-gamebox.com">← Volver a la tienda</a>
+    <div class="marca">The Game Box™ · +65.000 juegos retro</div>
+  </div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   Meta Pixel — evento Purchase (la otra mitad del embudo).
+   La landing dispara PageView→InitiateCheckout; aqui cae el que
+   YA PAGO en Stripe, asi que este es el Purchase real.
+   Valor: 34.99 USD como piso (sin backend no sabemos el combo
+   exacto; mejor subreportar que inflar). Se dispara UNA vez por
+   sesion aunque recarguen la pagina.
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  var PIXEL = "1076125914843182";
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+  (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', PIXEL);
+  fbq('track', 'PageView');
+  try{
+    var K = 'cu_purchase_' + (new URLSearchParams(location.search).get('s') || 'directo');
+    if(!sessionStorage.getItem(K)){
+      sessionStorage.setItem(K, '1');
+      fbq('track', 'Purchase', {
+        content_type: 'product',
+        content_ids: ['consola-ultimate'],
+        value: 34.99,
+        currency: 'USD'
+      });
+    }
+  }catch(e){
+    fbq('track', 'Purchase', {content_type:'product', content_ids:['consola-ultimate'], value:34.99, currency:'USD'});
+  }
+})();
+</script>
+</body>
+</html>
