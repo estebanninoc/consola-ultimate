@@ -6,16 +6,19 @@ Meta Pixel + atribucion de anuncios.
 Se ejecuta DESPUES de construir.py (y de moneda.py) y reescribe index.html para:
   1. Instalar el Meta Pixel con los eventos del embudo.
   2. Guardar los UTM y el fbclid con los que llego el visitante,
-     y pasarlos al checkout de Hotmart para poder atribuir cada venta.
+     y pasarlos al checkout de STRIPE (client_reference_id) para poder
+     atribuir cada venta desde el Dashboard de Stripe.
   3. Arreglar el id duplicado de los botones de compra, que rompia la medicion.
 
 ⚙️ ESTEBAN: pega tu ID de pixel en PIXEL_ID aqui abajo (o define la
 variable de entorno META_PIXEL_ID en el workflow). Sin ID, el script
 igual arregla los ids y la atribucion, pero no instala el pixel.
 
-El evento Purchase NO se dispara aqui: la compra ocurre en Hotmart.
-Ese se configura en Hotmart > Herramientas > Pixel de Facebook,
-pegando el mismo ID. Asi Meta recibe la conversion real.
+El evento Purchase NO se dispara aqui: la compra ocurre en Stripe.
+PENDIENTE: apuntar el after_completion de los 4 Payment Links a una
+pagina /gracias en the-gamebox.com que dispare fbq('track','Purchase')
+(o usar la Conversions API con el webhook de Stripe). Hasta entonces,
+Meta recibe el embudo hasta InitiateCheckout.
 
 Es idempotente.
 """
@@ -67,19 +70,23 @@ HEAD_TPL = r'''<script>
   }
   window.CU_ATRIB = capturar();
 
-  /* Parametros de seguimiento para el link de Hotmart.
-     Hotmart tiene dos campos nativos: src (origen) y sck (etiqueta libre). */
+  /* Etiqueta de seguimiento para el checkout de STRIPE.
+     Stripe solo acepta un campo en la URL del Payment Link:
+     client_reference_id (alfanumerico, guion y guion bajo, max 200).
+     Queda guardado en la sesion de pago y se ve en el Dashboard,
+     asi cada venta dice combo + campana + anuncio + origen. */
   window.CU_TRACK = function(combo){
     var a = window.CU_ATRIB || {};
-    function limpio(s){ return String(s || "").replace(/[^A-Za-z0-9_.+-]/g, "-").slice(0, 60); }
+    function limpio(s){ return String(s || "").replace(/[^A-Za-z0-9_-]/g, "-"); }
     var src = limpio(a.utm_source || (a.fbclid ? "facebook" : "directo"));
-    var sck = [limpio(combo),
+    var ref = [limpio(combo),
                limpio(a.utm_campaign || "sin-campana"),
-               limpio(a.utm_content  || "sin-anuncio")].join("|");
-    return { src: src, sck: sck };
+               limpio(a.utm_content  || "sin-anuncio"),
+               src].join("__").slice(0, 200);
+    return { src: src, ref: ref };
   };
 
-  /* ── 2. Meta Pixel ───────────────────────────────────────── */
+  /* ── 2. Meta Pixel ───────────────────────────────────── */
   var PIXEL = "__PIXEL_ID__";
   if(!PIXEL) return;
 
@@ -97,7 +104,7 @@ HEAD_TPL = r'''<script>
     content_name: 'MULTICONSOLA ULTIMATE RETRO',
     content_type: 'product',
     content_ids: ['consola-ultimate'],
-    value: 39.99,
+    value: 34.99,
     currency: 'USD'
   });
 })();
@@ -158,7 +165,7 @@ TAIL = r'''<script>
     };
   }
 
-  /* InitiateCheckout + atribucion, justo antes de saltar a Hotmart */
+  /* InitiateCheckout + atribucion, justo antes de saltar a Stripe */
   var _go = window.cuGoCheckout;
   if(typeof _go === "function"){
     window.cuGoCheckout = function(){
@@ -174,9 +181,9 @@ TAIL = r'''<script>
               || (window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
       if(!link) return _go.apply(this, arguments);
 
-      var t = window.CU_TRACK ? window.CU_TRACK(combo) : {src:"directo", sck:combo};
+      var t = window.CU_TRACK ? window.CU_TRACK(combo) : {ref:combo.replace(/\+/g,"-")};
       var sep = link.indexOf("?") > -1 ? "&" : "?";
-      link += sep + "sck=" + encodeURIComponent(t.sck) + "&src=" + encodeURIComponent(t.src);
+      link += sep + "client_reference_id=" + encodeURIComponent(t.ref);
 
       try{ ev("InitiateCheckout"); }catch(e){}
 
