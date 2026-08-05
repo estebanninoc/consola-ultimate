@@ -90,3 +90,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# 2026-08-05: pagina /gracias agregada; los Payment Links redirigen alli tras el pago.
