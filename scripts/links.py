@@ -92,3 +92,4 @@ if __name__ == '__main__':
     main()
 
 # 2026-08-05: pagina /gracias agregada; los Payment Links redirigen alli tras el pago.
+# 2026-08-06: WhatsApp de soporte de /gracias y del correo de entrega -> +573102611023.
