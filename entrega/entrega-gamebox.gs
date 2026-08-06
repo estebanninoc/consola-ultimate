@@ -25,13 +25,18 @@
 // ─────────────────────────────────────────────────────────────
 var ENTREGABLES = {
   'principal': [
-    // { nombre: 'MULTICONSOLA ULTIMATE RETRO — Guía de instalación', driveId: 'PEGA_AQUI_EL_ID', adjuntar: false },
+    { nombre: 'MULTICONSOLA ULTIMATE RETRO (versión completa)', url: 'https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file' },
+    { nombre: 'Versión LITE — computadoras gama media-baja', url: 'https://drive.google.com/drive/folders/18egvQaaJ3zNrX-gRKW65ahQTz_HlhXf_' },
+    { nombre: 'Versión BASE — computadoras gama baja', url: 'https://drive.google.com/drive/folders/1uHIuv5lU16fNeKFd9lQUflHavGAR516x' }
   ],
   'gold-pc': [
-    // { nombre: 'ULTIMATE LEYENDA — Acceso al pack', driveId: 'PEGA_AQUI_EL_ID', adjuntar: false },
+    { nombre: 'ULTIMATE LEYENDA — versión julio 2026', url: 'https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file' },
+    { nombre: 'Descarga directa alternativa', url: 'https://transfer.it/t/csJcbrplBRwL' }
   ],
   'gold-mob': [
-    // { nombre: 'PACK SUPREMO MOBILE — Acceso al pack', driveId: 'PEGA_AQUI_EL_ID', adjuntar: false },
+    { nombre: 'RETROGAMING ANDROID MOBILE (APK)', url: 'https://www.mediafire.com/file_premium/i7e3mb4wf4iryu4/VideoJuegos-Gtboxplay.apk/file' },
+    { nombre: 'ULTRA RETRO MOBILE ANDROID 30 (APK)', url: 'https://www.mediafire.com/file/4bdvjlpevywbacy/GT_BOX_PLAY_GAME_-_EMULADORES_%25281%2529_%25281%2529.apk/file' },
+    { nombre: 'PS2 MOBILE (APK)', url: 'https://www.mediafire.com/file/ahhv40xlukvzbh2/Igames_ps2_%2528Premium%2529_%25281%2529.apk/file' }
   ]
 };
 
