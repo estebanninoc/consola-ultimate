@@ -47,9 +47,9 @@ var PRICE_A_COMBO = {
 };
 
 var NOMBRES = {
-  'principal': '🕹️ MULTICONSOLA ULTIMATE RETRO™',
-  'gold-pc': '🎮 ULTIMATE LEYENDA',
-  'gold-mob': '📱 PACK SUPREMO MOBILE'
+  'principal': '&#128377;&#65039; MULTICONSOLA ULTIMATE RETRO&#8482;',
+  'gold-pc': '&#127918; ULTIMATE LEYENDA',
+  'gold-mob': '&#128241; PACK SUPREMO MOBILE'
 };
 
 // ═════════════════════════════════════════════════════════════
@@ -139,12 +139,12 @@ function enviarEntrega(correo, nombre, combos) {
     lista.forEach(function (item) {
       if (item.adjuntar && item.driveId) {
         try { adjuntos.push(DriveApp.getFileById(item.driveId).getBlob()); } catch (e3) { console.error('adjunto falló: ' + item.nombre); }
-        filas += '<tr><td style="padding:2px 0;font-size:14px;color:#333;">📎 ' + item.nombre + ' — va adjunto a este correo</td></tr>';
+        filas += '<tr><td style="padding:2px 0;font-size:14px;color:#333;">&#128206; ' + item.nombre + ' — va adjunto a este correo</td></tr>';
       } else {
         var url = item.url || ('https://drive.google.com/file/d/' + item.driveId + '/view');
         filas += '<tr><td style="padding:6px 0;">' +
           '<a href="' + url + '" style="display:inline-block;background:#1db954;color:#ffffff;font-weight:800;' +
-          'padding:12px 22px;border-radius:10px;text-decoration:none;font-size:14px;">⬇️ Descargar: ' + item.nombre + '</a></td></tr>';
+          'padding:12px 22px;border-radius:10px;text-decoration:none;font-size:14px;">&#11015;&#65039; Descargar: ' + item.nombre + '</a></td></tr>';
       }
     });
   });
@@ -153,7 +153,7 @@ function enviarEntrega(correo, nombre, combos) {
     '<div style="background:#f4f6f4;padding:28px 12px;font-family:Arial,Helvetica,sans-serif;">' +
     '<table align="center" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">' +
     '<tr><td style="background:#0a0f0a;padding:28px;text-align:center;">' +
-    '<div style="font-size:40px;">🕹️</div>' +
+    '<div style="font-size:40px;">&#128377;&#65039;</div>' +
     '<div style="color:#3cff91;font-size:24px;font-weight:900;letter-spacing:1px;">¡GRACIAS POR TU COMPRA, ' + saludo.toUpperCase() + '!</div>' +
     '<div style="color:#9aa0a6;font-size:13px;margin-top:6px;letter-spacing:2px;">THE GAME BOX™ · +65.000 JUEGOS RETRO</div>' +
     '</td></tr>' +
@@ -168,7 +168,7 @@ function enviarEntrega(correo, nombre, combos) {
   if (adjuntos.length) opciones.attachments = adjuntos;
   if (BCC) opciones.bcc = BCC;
 
-  GmailApp.sendEmail(correo, '🕹️ Tu MULTICONSOLA está aquí — descarga todo', 'Tu compra está confirmada. Abre este correo para descargar todo.', opciones);
+  GmailApp.sendEmail(correo, 'Tu MULTICONSOLA está aquí — descarga todo', 'Tu compra está confirmada. Abre este correo para descargar todo.', opciones);
 }
 
 // ═════════════════════════════════════════════════════════════
