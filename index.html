@@ -387,7 +387,7 @@
 
 
 
-<meta content="497bc6c4-4209-4169-addd-b94c58095777" name="shopify-y"/>
+<meta content="edbc454b-84b4-40cc-9d95-47ea7c33a83d" name="shopify-y"/>
 <link crossorigin="" href="https://open.er-api.com" rel="preconnect"/>
 <link href="https://api.country.is" rel="dns-prefetch"/>
 <style id="cu-fx-guard">html.cu-fx-wait .cu-main-price,html.cu-fx-wait .cu-main-compare,html.cu-fx-wait .cu-bump-price,html.cu-fx-wait .cu-bump-compare,html.cu-fx-wait .price-item--sale,html.cu-fx-wait .price-item--regular,html.cu-fx-wait #cu-total,html.cu-fx-wait #cu-savings{visibility:hidden!important}</style>
@@ -2676,9 +2676,9 @@ function faqToggle(btn){
 </div>
 <style>
 .cu-devices-section {
-  background: #000;
-  padding: 28px 20px;
-  font-family: 'Inter', Arial, sans-serif;
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
 }
 .cu-devices-label {
   text-align: center;
@@ -2690,74 +2690,22 @@ function faqToggle(btn){
   margin: 0 0 16px;
 }
 .cu-devices-label span { color: #3cff91; }
-.cu-devices-row {
-  display: flex;
-  gap: 12px;
+
+.cu-devices-image-wrap {
   width: 100%;
-  margin: 0 auto;
-}
-.cu-device-card {
-  flex: 1;
-  background: radial-gradient(ellipse at top, rgba(20,20,25,.9), #050505);
   border-radius: 14px;
-  padding: 16px 8px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-}
-.cu-device-icon {
-  width: 100%;
-  aspect-ratio: 1.8;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
   overflow: hidden;
 }
-.cu-device-icon img {
+.cu-devices-image-wrap img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.12);
+  height: auto;
 }
-.cu-device-name {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .5px;
-  color: #fff;
-  text-transform: uppercase;
-}
-/* Steam Deck — azul */
-.cu-device-card.deck { border: 2px solid #3ba3ff; box-shadow: 0 0 18px rgba(59,163,255,.25); }
-/* Windows PC — verde marca */
-.cu-device-card.pc { border: 2px solid #3cff91; box-shadow: 0 0 18px rgba(60,255,145,.25); }
-/* ROG Ally — violeta */
-.cu-device-card.ally { border: 2px solid #b06bff; box-shadow: 0 0 18px rgba(176,107,255,.25); }
 </style>
 <div class="cu-devices-section">
 <div class="cu-devices-label">✓ Funciona en <span>cualquiera</span> de estos dispositivos</div>
-<div class="cu-devices-row">
-<div class="cu-device-card deck">
-<div class="cu-device-icon">
-<img alt="Steam Deck" src="assets/8455-producto-51nw-keg9zl-sl1100_11zon_1.webp"/ loading="lazy" decoding="async">
-</div>
-<div class="cu-device-name">Steam Deck</div>
-</div>
-<div class="cu-device-card pc">
-<div class="cu-device-icon">
-<img alt="Windows PC" src="assets/33614_480_2026-06-10_15_32_22-1-300x300.webp"/ loading="lazy" decoding="async">
-</div>
-<div class="cu-device-name">Windows PC</div>
-</div>
-<div class="cu-device-card ally">
-<div class="cu-device-icon">
-<img alt="ASUS ROG Ally" src="assets/images_11zon_2.webp"/ loading="lazy" decoding="async">
-</div>
-<div class="cu-device-name">ASUS ROG Ally</div>
-</div>
+<div class="cu-devices-image-wrap">
+<img alt="Compatible con PC, Notebook/Portátil y Asus ROG Ally" loading="lazy" src="https://cdn.shopify.com/s/files/1/0806/0207/1291/files/ChatGPT_Image_5_ago_2026_07_17_47_p.m._11zon.webp?v=1785968287"/ decoding="async">
 </div>
 </div>
 <a class="link product__view-details animate-arrow" href="/products/consola-ultimate%E2%84%A2">
