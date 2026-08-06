@@ -27,11 +27,14 @@ var ENTREGABLES = {
   'principal': [
     { nombre: 'MULTICONSOLA ULTIMATE RETRO (versión completa)', url: 'https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file' },
     { nombre: 'Versión LITE — computadoras gama media-baja', url: 'https://drive.google.com/drive/folders/18egvQaaJ3zNrX-gRKW65ahQTz_HlhXf_' },
-    { nombre: 'Versión BASE — computadoras gama baja', url: 'https://drive.google.com/drive/folders/1uHIuv5lU16fNeKFd9lQUflHavGAR516x' }
+    { nombre: 'Versión BASE — computadoras gama baja', url: 'https://drive.google.com/drive/folders/1uHIuv5lU16fNeKFd9lQUflHavGAR516x' },
+    { nombre: 'Guía de instalación MultiConsola 2026', driveId: '1_hnl0GZYI1vw6nj3s1qv99lo20u5oNJi', adjuntar: true }
   ],
   'gold-pc': [
     { nombre: 'ULTIMATE LEYENDA — versión julio 2026', url: 'https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file' },
-    { nombre: 'Descarga directa alternativa', url: 'https://transfer.it/t/csJcbrplBRwL' }
+    { nombre: 'Descarga directa alternativa', url: 'https://transfer.it/t/csJcbrplBRwL' },
+    { nombre: 'Guía de instalación Leyenda — Android', driveId: '1Klf0IlfYhcyKx_Y6d8YBwDXqp1u4u2iP', adjuntar: true },
+    { nombre: 'Guía de instalación Leyenda — PS4/PS5/Xbox', driveId: '1YpiQ8l6llEopJRKJk9Yef4JuA1-UWnvi', adjuntar: true }
   ],
   'gold-mob': [
     { nombre: 'RETROGAMING ANDROID MOBILE (APK)', url: 'https://www.mediafire.com/file_premium/i7e3mb4wf4iryu4/VideoJuegos-Gtboxplay.apk/file' },
@@ -160,13 +163,13 @@ function enviarEntrega(correo, nombre, combos) {
     '<tr><td style="background:#0a0f0a;padding:28px;text-align:center;">' +
     '<div style="font-size:40px;">&#128377;&#65039;</div>' +
     '<div style="color:#3cff91;font-size:24px;font-weight:900;letter-spacing:1px;">¡GRACIAS POR TU COMPRA, ' + saludo.toUpperCase() + '!</div>' +
-    '<div style="color:#9aa0a6;font-size:13px;margin-top:6px;letter-spacing:2px;">THE GAME BOX™ · +65.000 JUEGOS RETRO</div>' +
+    '<div style="color:#9aa0a6;font-size:13px;margin-top:6px;letter-spacing:2px;">THE GAME BOX&#8482; · +65.000 JUEGOS RETRO</div>' +
     '</td></tr>' +
     '<tr><td style="padding:26px 32px 30px;">' +
     '<p style="font-size:15px;color:#333;margin:0 0 6px;">Aquí está <b>todo lo tuyo</b>. Descarga, sigue la guía y en 5 minutos estás jugando:</p>' +
     '<table width="100%" cellpadding="0" cellspacing="0">' + filas + '</table>' +
     '<p style="font-size:13px;color:#777;margin:26px 0 0;">¿Algún problema con la descarga? Responde este correo o escríbenos por ' +
-    '<a href="https://wa.me/18575295509" style="color:#1db954;font-weight:700;">WhatsApp</a> y te ayudamos al instante.</p>' +
+    '<a href="https://wa.me/573102611023" style="color:#1db954;font-weight:700;">WhatsApp</a> y te ayudamos al instante.</p>' +
     '</td></tr></table></div>';
 
   var opciones = { htmlBody: html, name: 'The Game Box' };
