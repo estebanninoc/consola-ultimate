@@ -48,10 +48,10 @@ var BCC = '';
 
 // price de Stripe → qué entregar (NO tocar salvo que cambien los productos)
 var PRICE_A_COMBO = {
-  'price_1U16tQCraKX72R2swkGNocWA': ['principal'],                        // $34.99
-  'price_1U17U8CraKX72R2szMhxcarB': ['principal', 'gold-pc'],             // $59.98 + Leyenda
-  'price_1U17UACraKX72R2sLBiHe2xV': ['principal', 'gold-mob'],            // $59.98 + Supremo
-  'price_1U17UCCraKX72R2s11blFbmZ': ['principal', 'gold-pc', 'gold-mob']  // $74.99 todo
+  'price_1U1cSuEIkdT1ZKlov4UV6J0Z': ['principal'],                        // $34.99
+  'price_1U1cSwEIkdT1ZKlokreSSUvx': ['principal', 'gold-pc'],             // $59.98 + Leyenda
+  'price_1U1cT9EIkdT1ZKlo85QCkIG9': ['principal', 'gold-mob'],            // $59.98 + Supremo
+  'price_1U1cTCEIkdT1ZKlo7WVqVvnO': ['principal', 'gold-pc', 'gold-mob']  // $74.99 todo
 };
 
 var NOMBRES = {
@@ -163,7 +163,7 @@ function enviarEntrega(correo, nombre, combos) {
     '<tr><td style="background:#0a0f0a;padding:28px;text-align:center;">' +
     '<div style="font-size:40px;">&#128377;&#65039;</div>' +
     '<div style="color:#3cff91;font-size:24px;font-weight:900;letter-spacing:1px;">¡GRACIAS POR TU COMPRA, ' + saludo.toUpperCase() + '!</div>' +
-    '<div style="color:#9aa0a6;font-size:13px;margin-top:6px;letter-spacing:2px;">THE GAME BOX&#8482; · +65.000 JUEGOS RETRO</div>' +
+    '<div style="color:#9aa0a6;font-size:13px;margin-top:6px;letter-spacing:2px;">THE GAME BOX™ · +65.000 JUEGOS RETRO</div>' +
     '</td></tr>' +
     '<tr><td style="padding:26px 32px 30px;">' +
     '<p style="font-size:15px;color:#333;margin:0 0 6px;">Aquí está <b>todo lo tuyo</b>. Descarga, sigue la guía y en 5 minutos estás jugando:</p>' +

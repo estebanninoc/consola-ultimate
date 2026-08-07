@@ -19,9 +19,10 @@ comprador (por IP): cada Price tiene currency_options con montos fijos en
 14 monedas de LATAM, los MISMOS numeros que muestra la landing (ver
 scripts/moneda.py). Landing y checkout son identicos por construccion.
 
-Cuenta Stripe: acct_1RyEj5CraKX72R2s (Esteban).
-Productos: prod_V19B3sZRqg3gAb (principal) · prod_V19nvh0bd93U7l (+leyenda)
-           prod_V19nKER4LLNQIV (+supremo) · prod_V19n4xkjtHwXwe (todo)
+Cuenta Stripe: acct_1U1cFpEIkdT1ZKlo ("The Gamebox" — el checkout y el
+extracto bancario dicen THE GAMEBOX / THEGAMEBOX.COM, no un nombre personal).
+Productos: prod_V1fo9bI44Mgs5x (principal) · prod_V1foosCz7VA9lL (+leyenda)
+           prod_V1foRduqk71z6b (+supremo) · prod_V1fonN8D2qKFGk (todo)
 
 'principal' vive en LINKS_DE_PAGO con la clave SIN comillas; las
 combinaciones viven en LINKS_COMBO con la clave entre comillas. Por eso
@@ -42,13 +43,13 @@ ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 
 LINKS = {
     # MULTICONSOLA ULTIMATE RETRO — $34.99
-    'principal': 'https://buy.stripe.com/5kQ9AS8nQ63ubEZ7y0fIs09',
+    'principal': 'https://buy.stripe.com/8x28wPeaqfvK2Ve8lZ7kc00',
     # + ULTIMATE LEYENDA — $59.98
-    'principal+gold-pc': 'https://buy.stripe.com/5kQ8wO1ZsdvW6kFdWofIs0a',
+    'principal+gold-pc': 'https://buy.stripe.com/9B614n7M2cjy0N66dR7kc01',
     # + PACK SUPREMO MOBILE — $59.98
-    'principal+gold-mob': 'https://buy.stripe.com/fZu9ASfQicrSbEZg4wfIs0b',
+    'principal+gold-mob': 'https://buy.stripe.com/eVqcN5eaqgzOfI06dR7kc02',
     # LOS TRES — $74.99
-    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/4gM4gy8nQfE4gZjaKcfIs0c',
+    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/bJe6oH3vM2IYeDW59N7kc03',
 }
 
 
@@ -92,4 +93,5 @@ if __name__ == '__main__':
     main()
 
 # 2026-08-05: pagina /gracias agregada; los Payment Links redirigen alli tras el pago.
-# 2026-08-06: WhatsApp de soporte de /gracias y del correo de entrega -> +573102611023.
+# 2026-08-06: migracion a la cuenta "The Gamebox" (acct_1U1cFpEIkdT1ZKlo): 4 links
+#             nuevos con las mismas currency_options fijas y redirect a /gracias.
