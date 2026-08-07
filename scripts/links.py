@@ -95,3 +95,6 @@ if __name__ == '__main__':
 # 2026-08-05: pagina /gracias agregada; los Payment Links redirigen alli tras el pago.
 # 2026-08-06: migracion a la cuenta "The Gamebox" (acct_1U1cFpEIkdT1ZKlo): 4 links
 #             nuevos con las mismas currency_options fijas y redirect a /gracias.
+# 2026-08-07: /gracias avisa que el correo puede tardar 5-10 min (la gente es impaciente
+#             y el correo real tardo un poco en la compra de prueba). Commit toca este
+#             archivo solo para disparar el workflow (paths: scripts/**).
