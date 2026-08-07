@@ -89,9 +89,9 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
 
      ⚙️ Si se cambia un precio: actualizar currency_options en Stripe Y
      esta tabla, en el mismo commit. Prices:
-       price_1U16tQCraKX72R2swkGNocWA (34.99)
-       price_1U17U8CraKX72R2szMhxcarB / price_1U17UACraKX72R2sLBiHe2xV (59.98)
-       price_1U17UCCraKX72R2s11blFbmZ (74.99)
+       price_1U1cSuEIkdT1ZKlov4UV6J0Z (34.99)
+       price_1U1cSwEIkdT1ZKlokreSSUvx / price_1U1cT9EIkdT1ZKlo85QCkIG9 (59.98)
+       price_1U1cTCEIkdT1ZKlo7WVqVvnO (74.99)
      ───────────────────────────────────────────────────────────── */
   var STRIPE_PRECIOS = {
     COP: {"34.99":115900, "24.99":82900,  "59.98":198800, "74.99":247900},
