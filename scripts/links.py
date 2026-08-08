@@ -98,3 +98,5 @@ if __name__ == '__main__':
 # 2026-08-07: /gracias avisa que el correo puede tardar 5-10 min (la gente es impaciente
 #             y el correo real tardo un poco en la compra de prueba). Commit toca este
 #             archivo solo para disparar el workflow (paths: scripts/**).
+# 2026-08-07 (2): aviso de /gracias sube a 10-15 min + enfasis en revisar SPAM (un
+#             cliente real lo recibio en spam). Toque para disparar el workflow.
