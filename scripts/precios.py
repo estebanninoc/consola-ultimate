@@ -7,15 +7,18 @@ construir.py se baja la pagina de Shopify, asi que los precios que trae son
 los de Shopify. Este script los reescribe sobre el HTML ya generado, para no
 depender de Shopify ni de editar el index.html a mano.
 
-Tabla actual (debe coincidir con lo configurado en Hotmart):
+Tabla actual (debe coincidir con los Prices de Stripe):
 
-    Producto principal          34.99   antes 117.00   -70%
-    Ultimate Leyenda            24.99   antes  85.00   -71%
-    Pack Supremo Mobile         24.99   antes  88.00   -72%
+    Producto principal           9.99   antes  33.00   -70%
+    Ultimate Leyenda             9.99   antes  35.00   -71%
+    Pack Supremo Mobile          9.99   antes  36.00   -72%
 
-    principal + leyenda         59.98
-    principal + supremo         59.98
-    los tres juntos             74.99   (suma 84.97, descuento extra de 9.98)
+    principal + leyenda         19.98
+    principal + supremo         19.98
+    los tres juntos             25.99   (suma 29.97, descuento extra de 3.98)
+
+    (Rebaja 2026-08-11: todo a 9.99 / trio 25.99; los "antes" conservan los
+    mismos porcentajes de descuento de la tabla anterior.)
 
 Ese ultimo es el motivo de que exista la parte de JavaScript: llevar los tres
 NO es la suma, tiene un descuento adicional, y el carrito tiene que reflejarlo.
@@ -30,10 +33,10 @@ import sys
 ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 MARCA = 'CU-PRECIOS v1'
 
-PRINCIPAL, PRINCIPAL_ANTES, PRINCIPAL_PCT = 34.99, 117.00, 70
-LEYENDA,   LEYENDA_ANTES,   LEYENDA_PCT   = 24.99,  85.00, 71
-SUPREMO,   SUPREMO_ANTES,   SUPREMO_PCT   = 24.99,  88.00, 72
-TODO = 74.99                      # los tres juntos, con descuento extra
+PRINCIPAL, PRINCIPAL_ANTES, PRINCIPAL_PCT = 9.99, 33.00, 70
+LEYENDA,   LEYENDA_ANTES,   LEYENDA_PCT   = 9.99, 35.00, 71
+SUPREMO,   SUPREMO_ANTES,   SUPREMO_PCT   = 9.99, 36.00, 72
+TODO = 25.99                      # los tres juntos, con descuento extra
 TODO_ANTES = PRINCIPAL_ANTES + LEYENDA_ANTES + SUPREMO_ANTES
 
 # lo que trae Shopify -> lo que debe decir
@@ -45,14 +48,14 @@ TEXTOS = [
      '<span class="cu-bump-price cu-leyenda-price">$%.2f</span>' % LEYENDA),
     ('<span class="cu-bump-price cu-leyenda-price">$35.20</span>',
      '<span class="cu-bump-price cu-leyenda-price">$%.2f</span>' % SUPREMO),
-    ('data-compare="85.00" data-price="34.00"', 'data-compare="85.00" data-price="%.2f"' % LEYENDA),
-    ('data-compare="88.00" data-price="35.20"', 'data-compare="88.00" data-price="%.2f"' % SUPREMO),
+    ('data-compare="85.00" data-price="34.00"', 'data-compare="%.2f" data-price="%.2f"' % (LEYENDA_ANTES, LEYENDA)),
+    ('data-compare="88.00" data-price="35.20"', 'data-compare="%.2f" data-price="%.2f"' % (SUPREMO_ANTES, SUPREMO)),
     ('var MAIN_PRICE   = 39.99;',   'var MAIN_PRICE   = %.2f;' % PRINCIPAL),
     ('var MAIN_COMPARE = 117.64;',  'var MAIN_COMPARE = %.2f;' % PRINCIPAL_ANTES),
 ]
 
 BLOQUE = '''<script>
-/* ══════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    CU-PRECIOS v1 — el pack completo tiene descuento adicional
 
    Llevar los tres NO es la suma de los tres:
@@ -60,7 +63,7 @@ BLOQUE = '''<script>
        precio real del combo            = %(todo).2f
    El carrito suma por defecto, asi que hay que corregirlo cuando
    los dos packs estan marcados.
-   ══════════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
   var TODO = %(todo).2f, TODO_ANTES = %(antes).2f;
@@ -120,7 +123,7 @@ def main():
             s = s[:ini] + s[fin + len('</script>\n'):]
             print('bloque anterior retirado (idempotente)')
 
-    # ── textos exactos ──────────────────────────────────────────
+    # ── textos exactos ──────────────────────────────────────────────
     hechos = 0
     for viejo, nuevo in TEXTOS:
         if viejo in s:
@@ -135,6 +138,11 @@ def main():
         ('"39.99"', '"%.2f"' % PRINCIPAL),
         ('-$77.65', '-$%.2f' % (PRINCIPAL_ANTES - PRINCIPAL)),
         ('68% OFF', '%d%% OFF' % PRINCIPAL_PCT),
+        # tachados de los packs: conservar el % de descuento tras la rebaja
+        ('$85.00',  '$%.2f' % LEYENDA_ANTES),
+        ('$88.00',  '$%.2f' % SUPREMO_ANTES),
+        ('"85.00"', '"%.2f"' % LEYENDA_ANTES),
+        ('"88.00"', '"%.2f"' % SUPREMO_ANTES),
     ]
     for viejo, nuevo in sueltos:
         n = s.count(viejo)
@@ -180,7 +188,7 @@ def main():
     fallos = []
     if s.count(MARCA) != 1:
         fallos.append('el bloque del combo no quedo inyectado')
-    for viejo in ('$39.99', '$117.64', '$34.00', '$35.20', '-$77.65'):
+    for viejo in ('$39.99', '$117.64', '$34.00', '$35.20', '-$77.65', '$85.00', '$88.00'):
         if viejo in s:
             fallos.append('quedo un precio viejo sin cambiar: %s' % viejo)
     if '$%.2f' % PRINCIPAL not in s:

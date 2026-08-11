@@ -9,10 +9,10 @@ Este script los reescribe sobre el HTML ya generado: para cambiar un link
 basta con editar la tabla de abajo.
 
 Cada clave es la combinacion que arma el carrito:
-    principal                      solo el producto           $34.99
-    principal+gold-pc              + Ultimate Leyenda         $59.98
-    principal+gold-mob             + Pack Supremo Mobile      $59.98
-    principal+gold-pc+gold-mob     los tres                   $74.99
+    principal                      solo el producto            $9.99
+    principal+gold-pc              + Ultimate Leyenda         $19.98
+    principal+gold-mob             + Pack Supremo Mobile      $19.98
+    principal+gold-pc+gold-mob     los tres                   $25.99
 
 ⚙️ Los Payment Links de Stripe presentan el precio EN LA MONEDA LOCAL del
 comprador (por IP): cada Price tiene currency_options con montos fijos en
@@ -42,14 +42,14 @@ import sys
 ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 
 LINKS = {
-    # MULTICONSOLA ULTIMATE RETRO — $34.99
-    'principal': 'https://buy.stripe.com/8x28wPeaqfvK2Ve8lZ7kc00',
-    # + ULTIMATE LEYENDA — $59.98
-    'principal+gold-pc': 'https://buy.stripe.com/9B614n7M2cjy0N66dR7kc01',
-    # + PACK SUPREMO MOBILE — $59.98
-    'principal+gold-mob': 'https://buy.stripe.com/eVqcN5eaqgzOfI06dR7kc02',
-    # LOS TRES — $74.99
-    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/bJe6oH3vM2IYeDW59N7kc03',
+    # MULTICONSOLA ULTIMATE RETRO — $9.99
+    'principal': 'https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04',
+    # + ULTIMATE LEYENDA — $19.98
+    'principal+gold-pc': 'https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05',
+    # + PACK SUPREMO MOBILE — $19.98
+    'principal+gold-mob': 'https://buy.stripe.com/8x200j7M2cjygM4au77kc06',
+    # LOS TRES — $25.99
+    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07',
 }
 
 
@@ -100,3 +100,5 @@ if __name__ == '__main__':
 #             archivo solo para disparar el workflow (paths: scripts/**).
 # 2026-08-07 (2): aviso de /gracias sube a 10-15 min + enfasis en revisar SPAM (un
 #             cliente real lo recibio en spam). Toque para disparar el workflow.
+# 2026-08-11: REBAJA GENERAL — todo a 9.99 / combos 19.98 / trio 25.99. Prices y
+#             Payment Links nuevos en la misma cuenta; tabla de monedas regenerada.

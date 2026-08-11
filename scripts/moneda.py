@@ -83,31 +83,33 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
      x1.045 de colchon — ARS x1.12 — y redondeo comercial hacia arriba)
 
      Claves: el precio USD que aparece en la pagina -> monto local EXACTO.
-       34.99 principal · 24.99 cada pack · 59.98 principal+un pack
-       74.99 los tres juntos
+       9.99 principal y cada pack · 19.98 principal+un pack
+       25.99 los tres juntos (rebaja 2026-08-11; tasa open.er-api del dia
+       x1.045 de colchon, ARS x1.12, redondeo comercial hacia arriba;
+       19.98 = exactamente 2x el monto de 9.99 para que el carrito cuadre)
      El checkout de Stripe presenta EXACTAMENTE estos montos por IP.
 
      ⚙️ Si se cambia un precio: actualizar currency_options en Stripe Y
-     esta tabla, en el mismo commit. Prices:
-       price_1U1cSuEIkdT1ZKlov4UV6J0Z (34.99)
-       price_1U1cSwEIkdT1ZKlokreSSUvx / price_1U1cT9EIkdT1ZKlo85QCkIG9 (59.98)
-       price_1U1cTCEIkdT1ZKlo7WVqVvnO (74.99)
+     esta tabla, en el mismo commit. Prices (rebaja):
+       price_1U3GIKEIkdT1ZKloupKnLL1R (9.99)
+       price_1U3GIZEIkdT1ZKloDXAnEwe3 / price_1U3GIlEIkdT1ZKlotre7Mk9Y (19.98)
+       price_1U3GIwEIkdT1ZKloNOTmFmnC (25.99)
      ───────────────────────────────────────────────────────────── */
   var STRIPE_PRECIOS = {
-    COP: {"34.99":115900, "24.99":82900,  "59.98":198800, "74.99":247900},
-    MXN: {"34.99":639,    "24.99":459,    "59.98":1098,   "74.99":1359},
-    BRL: {"34.99":189,    "24.99":139,    "59.98":328,    "74.99":399},
-    PEN: {"34.99":129,    "24.99":88.99,  "59.98":217.99, "74.99":269},
-    CLP: {"34.99":34900,  "24.99":24900,  "59.98":59800,  "74.99":72900},
-    ARS: {"34.99":58900,  "24.99":41900,  "59.98":100800, "74.99":125900},
-    UYU: {"34.99":1469,   "24.99":1049,   "59.98":2518,   "74.99":3149},
-    GTQ: {"34.99":279,    "24.99":199,    "59.98":478,    "74.99":599},
-    HNL: {"34.99":979,    "24.99":699,    "59.98":1678,   "74.99":2099},
-    NIO: {"34.99":1349,   "24.99":969,    "59.98":2318,   "74.99":2879},
-    CRC: {"34.99":16900,  "24.99":11900,  "59.98":28800,  "74.99":35900},
-    DOP: {"34.99":2119,   "24.99":1519,   "59.98":3638,   "74.99":4549},
-    PYG: {"34.99":218900, "24.99":155900, "59.98":374800, "74.99":467900},
-    BOB: {"34.99":439,    "24.99":319,    "59.98":758,    "74.99":939}
+    COP: {"9.99":33900,  "19.98":67800,  "25.99":85900},
+    MXN: {"9.99":179,    "19.98":358,    "25.99":469},
+    BRL: {"9.99":53.99,  "19.98":107.98, "25.99":139},
+    PEN: {"9.99":35.99,  "19.98":71.98,  "25.99":91.99},
+    CLP: {"9.99":9900,   "19.98":19800,  "25.99":24900},
+    ARS: {"9.99":16900,  "19.98":33800,  "25.99":43900},
+    UYU: {"9.99":429,    "19.98":858,    "25.99":1099},
+    GTQ: {"9.99":79.99,  "19.98":159.98, "25.99":209},
+    HNL: {"9.99":289,    "19.98":578,    "25.99":729},
+    NIO: {"9.99":389,    "19.98":778,    "25.99":1009},
+    CRC: {"9.99":4749,   "19.98":9498,   "25.99":12900},
+    DOP: {"9.99":609,    "19.98":1218,   "25.99":1589},
+    PYG: {"9.99":62900,  "19.98":125800, "25.99":161900},
+    BOB: {"9.99":129,    "19.98":258,    "25.99":329}
   };
 
   /* Factor SOLO para los numeros decorativos (precios tachados, "ahorras"):
