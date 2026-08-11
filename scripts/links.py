@@ -104,3 +104,6 @@ if __name__ == '__main__':
 #             Payment Links nuevos en la misma cuenta; tabla de monedas regenerada.
 # 2026-08-11 (2): nueva pagina /acceso-gb7k2/ (zona de descargas retro neon, noindex,
 #             productos A/B/C con placeholders para PDFs de guias). Toque para deploy.
+# 2026-08-11 (3): /acceso-gb7k2/ RETIRADA de este repo (riesgo: repo publico = ruta
+#             visible). Las zonas de descarga viven ahora en un repo aparte sin
+#             vinculo con la pagina, con links ofuscados. Toque para deploy.
