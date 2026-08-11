@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>ZONA DE DESCARGAS — The Game Box</title>
+<style>
+  :root{
+    --negro:#0a0f0a; --neon:#3cff91; --neon2:#00ff82; --verde:#1db954; --gris:#9aa0a6;
+    --oro:#ffd54a; --morado:#c58cff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:#000;color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    min-height:100vh;padding:40px 18px 60px;
+    overflow-x:hidden;position:relative;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:3;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 20%,rgba(60,255,145,.10),transparent 70%);
+  }
+  .marco{position:relative;z-index:2;max-width:680px;margin:0 auto}
+  .cabeza{text-align:center;margin-bottom:34px}
+  .joystick{font-size:56px;line-height:1;filter:drop-shadow(0 0 14px rgba(60,255,145,.8));animation:flotar 2.6s ease-in-out infinite;display:inline-block}
+  @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  h1{
+    font-size:clamp(28px,6vw,42px);font-weight:900;text-transform:uppercase;
+    letter-spacing:1.5px;line-height:1.15;margin:12px 0 8px;color:var(--neon);
+    text-shadow:0 0 8px rgba(60,255,145,.95),0 0 28px rgba(60,255,145,.55),0 0 60px rgba(60,255,145,.3);
+  }
+  .sub{font-size:15.5px;color:#c9d4cd;font-weight:600;max-width:520px;margin:0 auto}
+  .sub b{color:var(--neon2)}
+
+  .producto{
+    background:var(--negro);
+    border:1px solid rgba(60,255,145,.35);border-radius:18px;
+    box-shadow:0 0 28px rgba(60,255,145,.16), inset 0 0 50px rgba(60,255,145,.04);
+    padding:28px 24px 24px;margin-bottom:26px;
+  }
+  .producto.oro{border-color:rgba(255,213,74,.45);box-shadow:0 0 28px rgba(255,213,74,.14), inset 0 0 50px rgba(255,213,74,.04)}
+  .producto.morado{border-color:rgba(197,140,255,.45);box-shadow:0 0 28px rgba(197,140,255,.14), inset 0 0 50px rgba(197,140,255,.04)}
+  .etiqueta{
+    display:inline-block;padding:5px 14px;border-radius:999px;margin-bottom:10px;
+    border:1px solid var(--neon);color:var(--neon);
+    font-size:10.5px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;
+    text-shadow:0 0 10px rgba(60,255,145,.9);
+  }
+  .oro .etiqueta{border-color:var(--oro);color:var(--oro);text-shadow:0 0 10px rgba(255,213,74,.9)}
+  .morado .etiqueta{border-color:var(--morado);color:var(--morado);text-shadow:0 0 10px rgba(197,140,255,.9)}
+  h2{
+    font-size:clamp(19px,4vw,24px);font-weight:900;text-transform:uppercase;
+    letter-spacing:1px;color:#fff;margin-bottom:4px;
+  }
+  .desc{font-size:13.5px;color:var(--gris);margin-bottom:18px}
+  .btns{display:flex;flex-direction:column;gap:10px}
+  .btn{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 18px;border-radius:12px;text-decoration:none;
+    background:rgba(60,255,145,.08);border:1px solid rgba(60,255,145,.45);
+    color:#eafff3;font-weight:800;font-size:14.5px;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);background:rgba(60,255,145,.16);box-shadow:0 0 18px rgba(60,255,145,.35)}
+  .btn .ico{
+    flex:0 0 34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    background:var(--neon);color:#02120a;font-size:16px;box-shadow:0 0 12px rgba(60,255,145,.6);
+  }
+  .oro .btn{background:rgba(255,213,74,.07);border-color:rgba(255,213,74,.4)}
+  .oro .btn:hover{background:rgba(255,213,74,.14);box-shadow:0 0 18px rgba(255,213,74,.3)}
+  .oro .btn .ico{background:var(--oro);box-shadow:0 0 12px rgba(255,213,74,.55)}
+  .morado .btn{background:rgba(197,140,255,.07);border-color:rgba(197,140,255,.4)}
+  .morado .btn:hover{background:rgba(197,140,255,.14);box-shadow:0 0 18px rgba(197,140,255,.3)}
+  .morado .btn .ico{background:var(--morado);box-shadow:0 0 12px rgba(197,140,255,.55)}
+  .btn small{display:block;font-weight:600;font-size:11.5px;color:var(--gris);margin-top:1px}
+  .btn.guia{opacity:.55;cursor:default;border-style:dashed}
+  .btn.guia:hover{transform:none;box-shadow:none}
+  .btn.guia .ico{background:#39423c;color:#9aa0a6;box-shadow:none}
+
+  .nota{
+    max-width:520px;margin:6px auto 26px;padding:13px 18px;border-radius:12px;text-align:center;
+    border:1px solid rgba(255,196,0,.55);background:rgba(255,196,0,.07);
+    color:#ffe9a8;font-size:13.5px;font-weight:700;line-height:1.45;
+    box-shadow:0 0 18px rgba(255,196,0,.15);
+  }
+  .soporte{text-align:center;font-size:13.5px;color:var(--gris);margin-top:8px}
+  .soporte a{color:var(--neon);font-weight:800;text-decoration:none}
+  .marca{text-align:center;margin-top:30px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#556158}
+</style>
+</head>
+<body>
+  <div class="marco">
+    <div class="cabeza">
+      <span class="joystick">🕹️</span>
+      <h1>Zona de<br/>Descargas</h1>
+      <p class="sub">Aquí está <b>todo lo tuyo</b>. Descarga tu producto, sigue la guía de instalación y en <b>5 minutos</b> estás jugando. 🎮</p>
+    </div>
+
+    <p class="nota">⚠️ Descarga solo lo que compraste. ¿Dudas o algún link caído? Escríbenos por WhatsApp y te ayudamos al instante.</p>
+
+    <!-- ══════════ PRODUCTO A — MULTICONSOLA ══════════ -->
+    <section class="producto">
+      <span class="etiqueta">Producto A</span>
+      <h2>🕹️ Multiconsola Ultimate Retro™</h2>
+      <p class="desc">+50 consolas y +22.000 juegos para tu PC. Elige la versión según tu computadora.</p>
+      <div class="btns">
+        <a class="btn" href="https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file" target="_blank" rel="noopener"><span class="ico">⬇️</span><span>Descargar MULTICONSOLA — versión completa<small>Para computadoras gama media y alta</small></span></a>
+        <!-- PDF_A_GUIA_1: reemplazar href cuando llegue el PDF -->
+        <a class="btn guia" id="pdf-a-1" href="#"><span class="ico">📘</span><span>Guía de instalación 1<small>Muy pronto — mientras tanto, la tienes en tu correo</small></span></a>
+        <!-- PDF_A_GUIA_2: reemplazar href cuando llegue el PDF -->
+        <a class="btn guia" id="pdf-a-2" href="#"><span class="ico">📘</span><span>Guía de instalación 2<small>Muy pronto — mientras tanto, la tienes en tu correo</small></span></a>
+        <!-- PDF_A_GUIA_3: reemplazar href cuando llegue el PDF -->
+        <a class="btn guia" id="pdf-a-3" href="#"><span class="ico">📘</span><span>Guía de instalación 3<small>Muy pronto — mientras tanto, la tienes en tu correo</small></span></a>
+        <a class="btn" href="https://drive.google.com/drive/folders/18egvQaaJ3zNrX-gRKW65ahQTz_HlhXf_" target="_blank" rel="noopener"><span class="ico">💾</span><span>Versión LITE<small>Para computadoras gama media-baja</small></span></a>
+        <a class="btn" href="https://drive.google.com/drive/folders/1uHIuv5lU16fNeKFd9lQUflHavGAR516x" target="_blank" rel="noopener"><span class="ico">💾</span><span>Versión BASE<small>Para computadoras gama baja</small></span></a>
+      </div>
+    </section>
+
+    <!-- ══════════ PRODUCTO B — ULTIMATE LEYENDA ══════════ -->
+    <section class="producto oro">
+      <span class="etiqueta">Producto B</span>
+      <h2>🎮 Ultimate Leyenda</h2>
+      <p class="desc">La versión leyenda con todo el contenido actualizado. Dos opciones de descarga.</p>
+      <div class="btns">
+        <a class="btn" href="https://transfer.it/t/csJcbrplBRwL" target="_blank" rel="noopener"><span class="ico">⬇️</span><span>Descargar ULTIMATE LEYENDA<small>Descarga directa</small></span></a>
+        <a class="btn" href="https://www.mediafire.com/file/8b8ptuxvz2zt8r7/file" target="_blank" rel="noopener"><span class="ico">⬇️</span><span>Descarga alternativa (MediaFire)<small>Por si la primera va lenta</small></span></a>
+        <!-- PDF_B_GUIA_1: reemplazar href cuando llegue el PDF -->
+        <a class="btn guia" id="pdf-b-1" href="#"><span class="ico">📘</span><span>Guía de instalación<small>Muy pronto — mientras tanto, la tienes en tu correo</small></span></a>
+      </div>
+    </section>
+
+    <!-- ══════════ PRODUCTO C — PACK SUPREMO MOBILE ══════════ -->
+    <section class="producto morado">
+      <span class="etiqueta">Producto C</span>
+      <h2>📱 Pack Supremo Mobile</h2>
+      <p class="desc">3 apps para jugar retro directo en tu Android. Instala los APK y a jugar.</p>
+      <div class="btns">
+        <a class="btn" href="https://www.mediafire.com/file_premium/i7e3mb4wf4iryu4/VideoJuegos-Gtboxplay.apk/file" target="_blank" rel="noopener"><span class="ico">📱</span><span>RETROGAMING ANDROID MOBILE<small>APK — instálalo en tu Android</small></span></a>
+        <a class="btn" href="https://www.mediafire.com/file/4bdvjlpevywbacy/GT_BOX_PLAY_GAME_-_EMULADORES_%25281%2529_%25281%2529.apk/file" target="_blank" rel="noopener"><span class="ico">📱</span><span>ULTRA RETRO MOBILE ANDROID 30<small>APK — instálalo en tu Android</small></span></a>
+        <a class="btn" href="https://www.mediafire.com/file/ahhv40xlukvzbh2/Igames_ps2_%2528Premium%2529_%25281%2529.apk/file" target="_blank" rel="noopener"><span class="ico">📱</span><span>PS2 MOBILE<small>APK — instálalo en tu Android</small></span></a>
+        <!-- PDF_C_GUIA_1: reemplazar href cuando llegue el PDF -->
+        <a class="btn guia" id="pdf-c-1" href="#"><span class="ico">📘</span><span>Guía de instalación<small>Muy pronto — mientras tanto, la tienes en tu correo</small></span></a>
+      </div>
+    </section>
+
+    <p class="soporte">¿Algún problema con una descarga?<br/>
+      <a href="https://wa.me/573102611023?text=Hola!%20Tengo%20un%20problema%20con%20una%20descarga%20de%20la%20zona%20de%20descargas">📲 Soporte por WhatsApp</a>
+    </p>
+    <div class="marca">The Game Box™ · +65.000 juegos retro</div>
+  </div>
+<script>
+/* Los botones de guia pendientes no navegan hasta tener PDF */
+document.querySelectorAll('.btn.guia').forEach(function(b){
+  b.addEventListener('click', function(e){ if(b.getAttribute('href')==='#') e.preventDefault(); });
+});
+</script>
+</body>
+</html>

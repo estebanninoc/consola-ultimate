@@ -102,3 +102,5 @@ if __name__ == '__main__':
 #             cliente real lo recibio en spam). Toque para disparar el workflow.
 # 2026-08-11: REBAJA GENERAL — todo a 9.99 / combos 19.98 / trio 25.99. Prices y
 #             Payment Links nuevos en la misma cuenta; tabla de monedas regenerada.
+# 2026-08-11 (2): nueva pagina /acceso-gb7k2/ (zona de descargas retro neon, noindex,
+#             productos A/B/C con placeholders para PDFs de guias). Toque para deploy.
