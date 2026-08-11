@@ -16,7 +16,7 @@
 <meta content="PC" property="og:description"/><meta content="http:assets/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.webp" property="og:image"/>
 <meta content="assets/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.webp" property="og:image:secure_url"/>
 <meta content="1840" property="og:image:width"/>
-<meta content="1840" property="og:image:height"/><meta content="34.99" property="og:price:amount"/>
+<meta content="1840" property="og:image:height"/><meta content="9.99" property="og:price:amount"/>
 <meta content="USD" property="og:price:currency"/><meta content="summary_large_image" name="twitter:card"/>
 <meta content="MULTICONSOLA ULTIMATE RETRO™" name="twitter:title"/>
 <meta content="PC" name="twitter:description"/>
@@ -378,16 +378,16 @@
 <link href="assets/component-cart-items.css" media="print" onload="this.media='all'" rel="stylesheet"/>
 
 <link href="assets/component-predictive-search.css" media="print" onload="this.media='all'" rel="stylesheet"/>
-<!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
+<!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
+<!-- END app block --><!-- BEGIN app block: shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea -->
 
-<!-- END app block --><!-- BEGIN app block: shopify://apps/currency-converter/blocks/app-embed-block/a56d6bd1-e9df-4a4a-b98e-e9bb5c43a042 -->
 <!-- END app block --><link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch"/>
 
 
 
 
 
-<meta content="8f541777-3ddc-4fc2-a8d3-09a384eceed7" name="shopify-y"/>
+<meta content="5d2fa12a-c863-4cac-bf3f-c94b62ad47e7" name="shopify-y"/>
 <link crossorigin="" href="https://open.er-api.com" rel="preconnect"/>
 <link href="https://api.country.is" rel="dns-prefetch"/>
 <style id="cu-fx-guard">html.cu-fx-wait .cu-main-price,html.cu-fx-wait .cu-main-compare,html.cu-fx-wait .cu-bump-price,html.cu-fx-wait .cu-bump-compare,html.cu-fx-wait .price-item--sale,html.cu-fx-wait .price-item--regular,html.cu-fx-wait #cu-total,html.cu-fx-wait #cu-savings{visibility:hidden!important}</style>
@@ -523,31 +523,33 @@
      x1.045 de colchon — ARS x1.12 — y redondeo comercial hacia arriba)
 
      Claves: el precio USD que aparece en la pagina -> monto local EXACTO.
-       34.99 principal · 24.99 cada pack · 59.98 principal+un pack
-       74.99 los tres juntos
+       9.99 principal y cada pack · 19.98 principal+un pack
+       25.99 los tres juntos (rebaja 2026-08-11; tasa open.er-api del dia
+       x1.045 de colchon, ARS x1.12, redondeo comercial hacia arriba;
+       19.98 = exactamente 2x el monto de 9.99 para que el carrito cuadre)
      El checkout de Stripe presenta EXACTAMENTE estos montos por IP.
 
      ⚙️ Si se cambia un precio: actualizar currency_options en Stripe Y
-     esta tabla, en el mismo commit. Prices:
-       price_1U1cSuEIkdT1ZKlov4UV6J0Z (34.99)
-       price_1U1cSwEIkdT1ZKlokreSSUvx / price_1U1cT9EIkdT1ZKlo85QCkIG9 (59.98)
-       price_1U1cTCEIkdT1ZKlo7WVqVvnO (74.99)
+     esta tabla, en el mismo commit. Prices (rebaja):
+       price_1U3GIKEIkdT1ZKloupKnLL1R (9.99)
+       price_1U3GIZEIkdT1ZKloDXAnEwe3 / price_1U3GIlEIkdT1ZKlotre7Mk9Y (19.98)
+       price_1U3GIwEIkdT1ZKloNOTmFmnC (25.99)
      ───────────────────────────────────────────────────────────── */
   var STRIPE_PRECIOS = {
-    COP: {"34.99":115900, "24.99":82900,  "59.98":198800, "74.99":247900},
-    MXN: {"34.99":639,    "24.99":459,    "59.98":1098,   "74.99":1359},
-    BRL: {"34.99":189,    "24.99":139,    "59.98":328,    "74.99":399},
-    PEN: {"34.99":129,    "24.99":88.99,  "59.98":217.99, "74.99":269},
-    CLP: {"34.99":34900,  "24.99":24900,  "59.98":59800,  "74.99":72900},
-    ARS: {"34.99":58900,  "24.99":41900,  "59.98":100800, "74.99":125900},
-    UYU: {"34.99":1469,   "24.99":1049,   "59.98":2518,   "74.99":3149},
-    GTQ: {"34.99":279,    "24.99":199,    "59.98":478,    "74.99":599},
-    HNL: {"34.99":979,    "24.99":699,    "59.98":1678,   "74.99":2099},
-    NIO: {"34.99":1349,   "24.99":969,    "59.98":2318,   "74.99":2879},
-    CRC: {"34.99":16900,  "24.99":11900,  "59.98":28800,  "74.99":35900},
-    DOP: {"34.99":2119,   "24.99":1519,   "59.98":3638,   "74.99":4549},
-    PYG: {"34.99":218900, "24.99":155900, "59.98":374800, "74.99":467900},
-    BOB: {"34.99":439,    "24.99":319,    "59.98":758,    "74.99":939}
+    COP: {"9.99":33900,  "19.98":67800,  "25.99":85900},
+    MXN: {"9.99":179,    "19.98":358,    "25.99":469},
+    BRL: {"9.99":53.99,  "19.98":107.98, "25.99":139},
+    PEN: {"9.99":35.99,  "19.98":71.98,  "25.99":91.99},
+    CLP: {"9.99":9900,   "19.98":19800,  "25.99":24900},
+    ARS: {"9.99":16900,  "19.98":33800,  "25.99":43900},
+    UYU: {"9.99":429,    "19.98":858,    "25.99":1099},
+    GTQ: {"9.99":79.99,  "19.98":159.98, "25.99":209},
+    HNL: {"9.99":289,    "19.98":578,    "25.99":729},
+    NIO: {"9.99":389,    "19.98":778,    "25.99":1009},
+    CRC: {"9.99":4749,   "19.98":9498,   "25.99":12900},
+    DOP: {"9.99":609,    "19.98":1218,   "25.99":1589},
+    PYG: {"9.99":62900,  "19.98":125800, "25.99":161900},
+    BOB: {"9.99":129,    "19.98":258,    "25.99":329}
   };
 
   /* Factor SOLO para los numeros decorativos (precios tachados, "ahorras"):
@@ -758,15 +760,15 @@
    (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "https://buy.stripe.com/8x28wPeaqfvK2Ve8lZ7kc00",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
+  principal: "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
   b0: "https://pay.hotmart.com/X106964889D?off=c7rnch8s",   /* JUEGOS DE PS4            — $27.99 */
   b1: "https://pay.hotmart.com/O106964911H?off=0vqlev44",   /* JUEGOS DE PS5            — $29.60 */
   b2: "https://pay.hotmart.com/F106964936U?off=8fkm1imy",   /* JUEGOS DE XBOX SERIES    — $25.60 */
-  "gold-pc": "https://pay.hotmart.com/L106972133T?off=9zc6fnuq",   /* ULTIMATE LEYENDA         — $24.99 */
+  "gold-pc": "https://pay.hotmart.com/L106972133T?off=9zc6fnuq",   /* ULTIMATE LEYENDA         — $9.99 */
   b3: "https://pay.hotmart.com/F106971351O?off=x0logolr",   /* RETRO GAMING MOBILE      — $16.80 */
   b4: "https://pay.hotmart.com/Q106971374Q?off=moqagwmg",   /* ULTRA RETRO MOBILE       — $19.20 */
   b5: "https://pay.hotmart.com/M106971389O?off=fdqkpr2j",   /* PS2 MOBILE               — $17.60 */
-  "gold-mob": "https://pay.hotmart.com/Y106972171P?off=7l2spaxx"   /* PACK SUPREMO MOBILE      — $24.99 */
+  "gold-mob": "https://pay.hotmart.com/Y106972171P?off=7l2spaxx"   /* PACK SUPREMO MOBILE      — $9.99 */
 };
 /* LINKS_COMBO — rutas por combinación del carrito de la landing.
    La clave se arma con "principal" + los bonos marcados, en el orden del drawer:
@@ -779,12 +781,12 @@ var LINKS_COMBO = {
   "principal+0":        "https://pay.hotmart.com/D106973843E?off=5smsap7b",   /* MC + Juegos PS4          — $62.98 */
   "principal+1":        "https://pay.hotmart.com/R106973896Y?off=b50zd6k6",   /* MC + Juegos PS5          — $64.59 */
   "principal+2":        "https://pay.hotmart.com/Y106973920J?off=2795atqv",   /* MC + Juegos Xbox         — $60.59 */
-  "principal+gold-pc":  "https://buy.stripe.com/9B614n7M2cjy0N66dR7kc01",   /* MC + Pack Juegos         — $59.98 */
+  "principal+gold-pc":  "https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05",   /* MC + Pack Juegos         — $19.98 */
   "principal+3":        "https://pay.hotmart.com/P106973964I?off=lb04939l",   /* MC + AAA                 — $51.79 */
   "principal+4":        "https://pay.hotmart.com/E106973981Q?off=doflyrog",   /* MC + BBB                 — $54.19 */
   "principal+5":        "https://pay.hotmart.com/A106974004P?off=nbamy7si",   /* MC + CCC                 — $52.59 */
-  "principal+gold-mob": "https://buy.stripe.com/eVqcN5eaqgzOfI06dR7kc02",   /* MC + Pack a+b+c          — $59.98 */
-  "principal+gold-pc+gold-mob": "https://buy.stripe.com/bJe6oH3vM2IYeDW59N7kc03"   /* MC TODO       — $74.99 */
+  "principal+gold-mob": "https://buy.stripe.com/8x200j7M2cjygM4au77kc06",   /* MC + Pack a+b+c          — $19.98 */
+  "principal+gold-pc+gold-mob": "https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07"   /* MC TODO       — $25.99 */
 };
 </script>
 </head>
@@ -995,10 +997,10 @@ var LINKS_COMBO = {
 <p class="cu-main-name">MULTICONSOLA ULTIMATE RETRO™</p>
 <div class="cu-main-pricing">
 <div class="cu-main-row1">
-<span class="cu-main-compare">$117.00</span>
+<span class="cu-main-compare">$33.00</span>
 <span class="cu-main-pct">-70%</span>
 </div>
-<span class="cu-main-price">$34.99</span>
+<span class="cu-main-price">$9.99</span>
 </div>
 </div>
 </div>
@@ -1091,14 +1093,14 @@ var LINKS_COMBO = {
 <p class="cu-bump-title cu-leyenda-title">⚡ ULTIMATE LEYENDA</p>
 <p class="cu-bump-desc">Multiconsola Ultimate Retro™ + Juegos de PS4 + Juegos de PS5 + Juegos de Xbox Series. Llevate todo junto.</p>
 <div class="cu-bump-pricing">
-<span class="cu-bump-price cu-leyenda-price">$24.99</span>
-<span class="cu-bump-compare">$85.00</span>
+<span class="cu-bump-price cu-leyenda-price">$9.99</span>
+<span class="cu-bump-compare">$35.00</span>
 <span class="cu-bump-pct cu-leyenda-pct">-71%</span>
 </div>
 </div>
 </div>
 <label class="cu-bump-footer cu-bump-footer-leyenda" for="cu-cb-gold-pc">
-<input class="cu-bump-cb" data-compare="85.00" data-price="24.99" data-variant="48746935255291" id="cu-cb-gold-pc" onchange="cuToggleGold(this,'gold-pc')" type="checkbox"/>
+<input class="cu-bump-cb" data-compare="35.00" data-price="9.99" data-variant="48746935255291" id="cu-cb-gold-pc" onchange="cuToggleGold(this,'gold-pc')" type="checkbox"/>
 <span class="cu-add-lbl">
 <span class="cu-add-box cu-add-box-gold"></span>
 <span class="cu-add-txt cu-add-txt-gold" data-label="+ AGREGAR ULTIMATE LEYENDA" id="cu-txt-gold-pc"></span>
@@ -1191,14 +1193,14 @@ var LINKS_COMBO = {
 <p class="cu-bump-title cu-leyenda-title">🏆 PACK SUPREMO MOBILE</p>
 <p class="cu-bump-desc">RETRO GAMING + ULTRA RETRO + PS2 MOBILE. +90.000 juegos · 45+ consolas · 3 APKs listas. Todo en tu celular.</p>
 <div class="cu-bump-pricing">
-<span class="cu-bump-price cu-leyenda-price">$24.99</span>
-<span class="cu-bump-compare">$88.00</span>
+<span class="cu-bump-price cu-leyenda-price">$9.99</span>
+<span class="cu-bump-compare">$36.00</span>
 <span class="cu-bump-pct cu-leyenda-pct">-72%</span>
 </div>
 </div>
 </div>
 <label class="cu-bump-footer cu-bump-footer-leyenda" for="cu-cb-gold-mob">
-<input class="cu-bump-cb" data-compare="88.00" data-price="24.99" data-variant="48773401837819" id="cu-cb-gold-mob" onchange="cuToggleGold(this,'gold-mob')" type="checkbox"/>
+<input class="cu-bump-cb" data-compare="36.00" data-price="9.99" data-variant="48773401837819" id="cu-cb-gold-mob" onchange="cuToggleGold(this,'gold-mob')" type="checkbox"/>
 <span class="cu-add-lbl">
 <span class="cu-add-box cu-add-box-gold"></span>
 <span class="cu-add-txt cu-add-txt-gold" data-label="+ AGREGAR PACK SUPREMO MOBILE" id="cu-txt-gold-mob"></span>
@@ -1214,11 +1216,11 @@ var LINKS_COMBO = {
 <div class="cu-totals">
 <div class="cu-savings-row">
 <span>Ahorrás</span>
-<span class="cu-savings-val" id="cu-savings">-$82.01</span>
+<span class="cu-savings-val" id="cu-savings">-$23.01</span>
 </div>
 <div class="cu-total-row">
 <span class="cu-total-lbl">TOTAL</span>
-<span class="cu-total-val" id="cu-total">$34.99</span>
+<span class="cu-total-val" id="cu-total">$9.99</span>
 </div>
 </div>
 <button class="cu-checkout-btn" id="cu-btn" onclick="cuGoCheckout()">
@@ -1354,8 +1356,8 @@ var LINKS_COMBO = {
 (function(){
 'use strict';
 
-var MAIN_PRICE   = 34.99;
-var MAIN_COMPARE = 117.00;
+var MAIN_PRICE   = 9.99;
+var MAIN_COMPARE = 33.00;
 var MAIN_VARIANT = 48561488331003;
 
 function fmt(n){ return '$' + n.toFixed(2); }
@@ -2517,19 +2519,19 @@ function faqToggle(btn){
 <div class="price price--large price--on-sale price--show-badge">
 <div class="price__container"><div class="price__regular"><span class="visually-hidden visually-hidden--inline">Precio habitual</span>
 <span class="price-item price-item--regular">
-            $34.99 USD
+            $9.99 USD
           </span></div>
 <div class="price__sale">
 <span class="visually-hidden visually-hidden--inline">Precio habitual</span>
 <span>
 <s class="price-item price-item--regular">
               
-                $117.00 USD
+                $33.00 USD
               
             </s>
 </span><span class="visually-hidden visually-hidden--inline">Precio de oferta</span>
 <span class="price-item price-item--sale price-item--last">
-          $34.99 USD
+          $9.99 USD
         </span>
 </div></div><span class="badge price__badge-sale color-scheme-4">
         Oferta Lanzamiento 70% OFF 🎁 
@@ -2726,7 +2728,7 @@ function faqToggle(btn){
 </product-modal>
 
 <script type="application/ld+json">
-      {"@context":"http:\/\/schema.org\/","@id":"\/products\/consola-ultimate%E2%84%A2#product","@type":"Product","brand":{"@type":"Brand","name":"Online Store"},"category":"Videoconsolas","description":"","image":"https:\/\/consolaultimate.shop\/cdn\/shop\/files\/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.png?v=1775746358\u0026width=1920","name":"MULTICONSOLA ULTIMATE RETRO™","offers":{"@id":"\/products\/consola-ultimate%E2%84%A2?variant=48561488331003#offer","@type":"Offer","availability":"http:\/\/schema.org\/InStock","price":"34.99","priceCurrency":"USD","url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2?variant=48561488331003"},"url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2"}
+      {"@context":"http:\/\/schema.org\/","@id":"\/products\/consola-ultimate%E2%84%A2#product","@type":"Product","brand":{"@type":"Brand","name":"Online Store"},"category":"Videoconsolas","description":"","image":"https:\/\/consolaultimate.shop\/cdn\/shop\/files\/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.png?v=1775746358\u0026width=1920","name":"MULTICONSOLA ULTIMATE RETRO™","offers":{"@id":"\/products\/consola-ultimate%E2%84%A2?variant=48561488331003#offer","@type":"Offer","availability":"http:\/\/schema.org\/InStock","price":"9.99","priceCurrency":"USD","url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2?variant=48561488331003"},"url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2"}
     </script>
 </div>
 </product-info>
@@ -6263,19 +6265,19 @@ function cuFaqToggle(btn) {
 <div class="price price--large price--on-sale price--show-badge">
 <div class="price__container"><div class="price__regular"><span class="visually-hidden visually-hidden--inline">Precio habitual</span>
 <span class="price-item price-item--regular">
-            $34.99 USD
+            $9.99 USD
           </span></div>
 <div class="price__sale">
 <span class="visually-hidden visually-hidden--inline">Precio habitual</span>
 <span>
 <s class="price-item price-item--regular">
               
-                $117.00 USD
+                $33.00 USD
               
             </s>
 </span><span class="visually-hidden visually-hidden--inline">Precio de oferta</span>
 <span class="price-item price-item--sale price-item--last">
-          $34.99 USD
+          $9.99 USD
         </span>
 </div></div><span class="badge price__badge-sale color-scheme-4">
         Oferta Lanzamiento 70% OFF 🎁 
@@ -6416,7 +6418,7 @@ function cuFaqToggle(btn) {
 </section>
 
 <script type="application/ld+json">
-    {"@context":"http:\/\/schema.org\/","@id":"\/products\/consola-ultimate%E2%84%A2#product","@type":"Product","brand":{"@type":"Brand","name":"Online Store"},"category":"Videoconsolas","description":"","image":"https:\/\/consolaultimate.shop\/cdn\/shop\/files\/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.png?v=1775746358\u0026width=1920","name":"MULTICONSOLA ULTIMATE RETRO™","offers":{"@id":"\/products\/consola-ultimate%E2%84%A2?variant=48561488331003#offer","@type":"Offer","availability":"http:\/\/schema.org\/InStock","price":"34.99","priceCurrency":"USD","url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2?variant=48561488331003"},"url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2"}
+    {"@context":"http:\/\/schema.org\/","@id":"\/products\/consola-ultimate%E2%84%A2#product","@type":"Product","brand":{"@type":"Brand","name":"Online Store"},"category":"Videoconsolas","description":"","image":"https:\/\/consolaultimate.shop\/cdn\/shop\/files\/hf_20260409_144831_3b1e2a92-9d05-476c-9547-430d3d0be464.png?v=1775746358\u0026width=1920","name":"MULTICONSOLA ULTIMATE RETRO™","offers":{"@id":"\/products\/consola-ultimate%E2%84%A2?variant=48561488331003#offer","@type":"Offer","availability":"http:\/\/schema.org\/InStock","price":"9.99","priceCurrency":"USD","url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2?variant=48561488331003"},"url":"https:\/\/consolaultimate.shop\/products\/consola-ultimate%E2%84%A2"}
   </script>
 
 
@@ -6692,18 +6694,18 @@ function cuFaqToggle(btn) {
 })();
 </script>
 <script>
-/* ══════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    CU-PRECIOS v1 — el pack completo tiene descuento adicional
 
    Llevar los tres NO es la suma de los tres:
-       34.99 + 24.99 + 24.99 = 84.97
-       precio real del combo            = 74.99
+       9.99 + 9.99 + 9.99 = 29.97
+       precio real del combo            = 25.99
    El carrito suma por defecto, asi que hay que corregirlo cuando
    los dos packs estan marcados.
-   ══════════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  var TODO = 74.99, TODO_ANTES = 290.00;
+  var TODO = 25.99, TODO_ANTES = 104.00;
 
   function fmt(v){
     return (window.CU_FX && window.CU_FX.fmt) ? window.CU_FX.fmt(v) : "$" + v.toFixed(2);
