@@ -106,7 +106,10 @@ nuevo = '''window.cuGoCheckout = function(){
   });
   var combo = keys.join('+');
   var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
-  var link = _okStripe(LINKS_COMBO && LINKS_COMBO[combo]) || _okStripe(LINKS_DE_PAGO.principal) || '';
+  var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || '';
+  /* 🔒 CU_SOLO_STRIPE — se filtra DESPUES de resolver para que tambien pase por
+     el candado el link de oferta por pais que inyecta scripts/moneda.py. */
+  link = _okStripe(link) || _okStripe(LINKS_DE_PAGO.principal) || '';
   if(!link){
     var btn = document.getElementById('cu-btn'); var prev = btn.innerHTML;
     btn.innerHTML = '⚠️ Configura tu link de pago';
@@ -298,7 +301,12 @@ solo_packs = '''<script>
     });
     var combo = keys.join("+");
     var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
-    var link = _okStripe(LINKS_COMBO && LINKS_COMBO[combo]) || _okStripe(LINKS_DE_PAGO.principal) || "";
+    var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || "";
+    /* 🔒 CU_SOLO_STRIPE — se filtra DESPUES de resolver para que tambien pase por
+       el candado el link de oferta por pais que inyecta scripts/moneda.py.
+       OJO: la linea de arriba la busca moneda.py TEXTUALMENTE (viejo_link) para
+       enganchar CU_LINK_PAIS — si se la reescribe, el build aborta. */
+    link = _okStripe(link) || _okStripe(LINKS_DE_PAGO.principal) || "";
     if(!link){
       var btn = document.getElementById("cu-btn"); var prev = btn.innerHTML;
       btn.innerHTML = "⚠️ Configura tu link de pago";

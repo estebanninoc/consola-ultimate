@@ -99,12 +99,14 @@ HEAD_TPL = r'''<script>
   fbq('init', PIXEL);
   fbq('track', 'PageView');
 
-  /* ViewContent: el visitante esta viendo el producto */
+  /* ViewContent: el visitante esta viendo el producto.
+     El valor es el precio REAL de entrada en Stripe (payment link 7kc04 = 9.99 USD).
+     Si cambia el precio de venta, cambiar tambien aqui: Meta optimiza con este numero. */
   fbq('track', 'ViewContent', {
     content_name: 'MULTICONSOLA ULTIMATE RETRO',
     content_type: 'product',
     content_ids: ['consola-ultimate'],
-    value: 34.99,
+    value: 9.99,
     currency: 'USD'
   });
 })();
@@ -179,6 +181,10 @@ TAIL = r'''<script>
       var link = (window.CU_LINK_PAIS && window.CU_LINK_PAIS(combo))
               || (window.LINKS_COMBO && LINKS_COMBO[combo])
               || (window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
+      /* 🔒 CU_SOLO_STRIPE — este es el ultimo punto antes del redirect real:
+         si la URL no es de Stripe se descarta y cae al principal. */
+      var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
+      link = _okStripe(link) || _okStripe(window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
       if(!link) return _go.apply(this, arguments);
 
       var t = window.CU_TRACK ? window.CU_TRACK(combo) : {ref:combo.replace(/\+/g,"-")};
