@@ -116,13 +116,29 @@
    Meta Pixel — evento Purchase (la otra mitad del embudo).
    La landing dispara PageView→InitiateCheckout; aqui cae el que
    YA PAGO en Stripe, asi que este es el Purchase real.
-   Valor: 34.99 USD como piso (sin backend no sabemos el combo
-   exacto; mejor subreportar que inflar). Se dispara UNA vez por
-   sesion aunque recarguen la pagina.
+
+   VALOR: viene en ?v= — cada Payment Link de Stripe redirige aqui
+   con SU monto (9.99 / 19.98 / 25.99 ...), asi el pixel reporta lo
+   que el cliente pago de verdad. Antes estaba fijo en 34.99 y Meta
+   optimizaba con un ticket inflado ~3x.
+   Si ?v= no viene o trae basura, cae a 9.99 (producto individual,
+   el piso real de hoy): mejor subreportar que inflar.
+   Se dispara UNA vez por sesion aunque recarguen la pagina.
    ══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
   var PIXEL = "1076125914843182";
+  var PISO = 9.99;
+  function montoReal(){
+    try{
+      var raw = new URLSearchParams(location.search).get('v');
+      if(!raw) return PISO;
+      var n = parseFloat(String(raw).replace(',', '.'));
+      if(!isFinite(n) || n < 1 || n > 500) return PISO;
+      return Math.round(n * 100) / 100;
+    }catch(e){ return PISO; }
+  }
+  var VALOR = montoReal();
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
@@ -137,12 +153,12 @@
       fbq('track', 'Purchase', {
         content_type: 'product',
         content_ids: ['consola-ultimate'],
-        value: 34.99,
+        value: VALOR,
         currency: 'USD'
       });
     }
   }catch(e){
-    fbq('track', 'Purchase', {content_type:'product', content_ids:['consola-ultimate'], value:34.99, currency:'USD'});
+    fbq('track', 'Purchase', {content_type:'product', content_ids:['consola-ultimate'], value:VALOR, currency:'USD'});
   }
 })();
 </script>
