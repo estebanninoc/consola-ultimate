@@ -59,36 +59,40 @@ html2 = re.sub(r'<form([^>]*)action="[^"]*/cart/add"', r'<form onsubmit="return 
 config = '''<script>
 /* ═════════════════════════════════════════════════════════════
    ⚙️ ESTEBAN: PEGA AQUÍ TUS LINKS DE PAGO ⚙️
-   (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
+   (STRIPE — unica caja desde 2026-08-05; Hotmart retirado 2026-08-13)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "https://pay.hotmart.com/N106875864F?off=srtfx2gy&checkoutMode=10",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
-  b0: "https://pay.hotmart.com/X106964889D?off=c7rnch8s",   /* JUEGOS DE PS4            — $27.99 */
-  b1: "https://pay.hotmart.com/O106964911H?off=0vqlev44",   /* JUEGOS DE PS5            — $29.60 */
-  b2: "https://pay.hotmart.com/F106964936U?off=8fkm1imy",   /* JUEGOS DE XBOX SERIES    — $25.60 */
-  "gold-pc": "https://pay.hotmart.com/L106972133T?off=9zc6fnuq",   /* ULTIMATE LEYENDA         — $34.00 */
-  b3: "https://pay.hotmart.com/F106971351O?off=x0logolr",   /* RETRO GAMING MOBILE      — $16.80 */
-  b4: "https://pay.hotmart.com/Q106971374Q?off=moqagwmg",   /* ULTRA RETRO MOBILE       — $19.20 */
-  b5: "https://pay.hotmart.com/M106971389O?off=fdqkpr2j",   /* PS2 MOBILE               — $17.60 */
-  "gold-mob": "https://pay.hotmart.com/Y106972171P?off=7l2spaxx"   /* PACK SUPREMO MOBILE      — $35.20 */
+  /* 🔒 HOTMART NO EXISTE MAS (2026-08-13). El unico checkout valido es STRIPE:
+     el candado CU_SOLO_STRIPE (abajo) descarta cualquier URL que no sea
+     https://buy.stripe.com/ y cae al principal. */
+  principal:  "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",   /* MULTICONSOLA ULTIMATE RETRO™ — $9.99 */
+  "gold-mob": "https://buy.stripe.com/cNi3cv6HY0AQ7budGj7kc08"    /* PACK SUPREMO MOBILE (suelto) — $9.99 */
+  /* Retirados 2026-08-13 (apuntaban a Hotmart y eran inalcanzables): los bonos
+     sueltos b0..b5 —viven dentro de los dos packs— y "gold-pc" suelto, que NO
+     tiene Payment Link propio en Stripe. Si algun dia se vende suelto, crearlo
+     con currency_options en las 14 monedas o el precio de la landing no cuadra. */
 };
 /* LINKS_COMBO — rutas por combinación del carrito de la landing.
    La clave se arma con "principal" + los bonos marcados, en el orden del drawer:
      0 = Juegos PS4 · 1 = Juegos PS5 · 2 = Juegos Xbox · gold-pc = Ultimate Leyenda (Pack Juegos)
      3 = Retro Gaming Mobile · 4 = Ultra Retro Mobile · 5 = PS2 Mobile · gold-mob = Pack Supremo
-   Ej.: "principal+0+2": "https://pay.hotmart.com/…"
+   Ej.: "principal+gold-pc": "https://buy.stripe.com/…"
    Si la combinación no está aquí, va al checkout del principal (que muestra
    los 8 bonos para replicar la selección) etiquetado con sck=<combinación>. */
 var LINKS_COMBO = {
-  "principal+0":        "https://pay.hotmart.com/D106973843E?off=5smsap7b",   /* MC + Juegos PS4          — $62.98 */
-  "principal+1":        "https://pay.hotmart.com/R106973896Y?off=b50zd6k6",   /* MC + Juegos PS5          — $64.59 */
-  "principal+2":        "https://pay.hotmart.com/Y106973920J?off=2795atqv",   /* MC + Juegos Xbox         — $60.59 */
-  "principal+gold-pc":  "https://pay.hotmart.com/G106973941A?off=464flaar&checkoutMode=10",   /* MC + Pack Juegos         — $68.99 */
-  "principal+3":        "https://pay.hotmart.com/P106973964I?off=lb04939l",   /* MC + AAA                 — $51.79 */
-  "principal+4":        "https://pay.hotmart.com/E106973981Q?off=doflyrog",   /* MC + BBB                 — $54.19 */
-  "principal+5":        "https://pay.hotmart.com/A106974004P?off=nbamy7si",   /* MC + CCC                 — $52.59 */
-  "principal+gold-mob": "https://pay.hotmart.com/S106974036W?off=tgm2hq2f&checkoutMode=10",   /* MC + Pack a+b+c          — $70.19 */
-  "principal+gold-pc+gold-mob": "https://pay.hotmart.com/T106974063L?off=wobycom3&checkoutMode=10"   /* MC TODO       — $104.19 */
+  /* Las 3 de aca + el principal (fallback) son TODOS los checkouts vivos:
+     el carrito solo puede producir estas 4 combinaciones. */
+  "principal+gold-pc":  "https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05",   /* MC + Ultimate Leyenda — $19.98 */
+  "principal+gold-mob": "https://buy.stripe.com/8x200j7M2cjygM4au77kc06",   /* MC + Pack Supremo     — $19.98 */
+  "principal+gold-pc+gold-mob": "https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07"   /* LOS TRES       — $25.99 */
+  /* Retirados 2026-08-13: principal+0..5 (combos numericos de Hotmart), muertos
+     desde que el carrito fuerza packs completos. */
+};
+
+/* 🔒 CANDADO CU_SOLO_STRIPE — ninguna URL que no sea de Stripe llega al cliente.
+   Fail-safe: lo que no pasa se descarta y el boton cae al link del principal. */
+window.CU_SOLO_STRIPE = function(u){
+  return (typeof u === "string" && u.indexOf("https://buy.stripe.com/") === 0) ? u : "";
 };
 </script>'''
 html2 = html2.replace('</head>', config + '\n</head>', 1)
@@ -101,14 +105,15 @@ nuevo = '''window.cuGoCheckout = function(){
     keys.push(cb.id.replace('cu-cb-','').replace('cu-cb',''));
   });
   var combo = keys.join('+');
-  var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || '';
+  var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
+  var link = _okStripe(LINKS_COMBO && LINKS_COMBO[combo]) || _okStripe(LINKS_DE_PAGO.principal) || '';
   if(!link){
     var btn = document.getElementById('cu-btn'); var prev = btn.innerHTML;
     btn.innerHTML = '⚠️ Configura tu link de pago';
     setTimeout(function(){ btn.innerHTML = prev; }, 3000);
     return;
   }
-  /* etiqueta la venta en Hotmart con lo seleccionado en la landing (sck) */
+  /* etiqueta la venta en Stripe con lo seleccionado en la landing (sck) */
   link += (link.indexOf('?') > -1 ? '&' : '?') + 'sck=' + encodeURIComponent(combo);
   window.location.href = link;
 };'''
@@ -292,7 +297,8 @@ solo_packs = '''<script>
       var cb = cbPack(key); if(cb && cb.checked) keys.push(key);
     });
     var combo = keys.join("+");
-    var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || "";
+    var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
+    var link = _okStripe(LINKS_COMBO && LINKS_COMBO[combo]) || _okStripe(LINKS_DE_PAGO.principal) || "";
     if(!link){
       var btn = document.getElementById("cu-btn"); var prev = btn.innerHTML;
       btn.innerHTML = "⚠️ Configura tu link de pago";

@@ -108,11 +108,12 @@ Lista viva de lo hecho y lo que falta. Se marca con `[x]` a medida que se cierra
 - [ ] **Barra de compra fija en el scroll**
       La pagina tiene ~6.600 lineas y el boton de compra sale solo en 2 puntos.
 
-- [ ] **Limpiar links muertos de Hotmart**
-      Quedan ~16 links de pay.hotmart.com en tablas del HTML que ya no son
-      alcanzables (bonos sueltos y combos numericos; el carrito fuerza packs
-      completos y los 4 combos reales ya apuntan a Stripe). Limpiarlos en
-      construir.py o dejarlos morir con la proxima regeneracion.
+- [x] **Limpiar links muertos de Hotmart** — HECHO 2026-08-13
+      Purgados los 20 links de pay.hotmart.com del HTML **y de construir.py**
+      (si solo se limpiaba el HTML, la proxima regeneracion los devolvia).
+      Ademas: candado `CU_SOLO_STRIPE` — cualquier URL que no empiece con
+      https://buy.stripe.com/ se descarta y el boton cae al principal; y
+      links.py aborta el build si aparece un solo link que no sea de Stripe.
 
 - [ ] **Permiso de Workflows para el conector de GitHub**
       Sin el, `.github/workflows/desplegar.yml` hay que editarlo a mano cada vez

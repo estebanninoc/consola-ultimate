@@ -86,6 +86,18 @@ def main():
     for clave, url in LINKS.items():
         if url not in s:
             sys.exit('ERROR links.py: %s no quedo aplicado' % clave)
+
+    # 🔒 CANDADO 2026-08-13 — Hotmart no existe mas: el unico checkout es Stripe.
+    # Si alguna vez vuelve a colarse un link de otra caja, el build PARA aca en
+    # vez de publicar una landing que manda al cliente a una caja que no cobra.
+    otras = re.findall(
+        r'https?://[^"\'\s)]*(?:hotmart|mercadopago|mpago|wompi|payu|paypal|bold\.co)[^"\'\s)]*', s)
+    if otras:
+        sys.exit('ERROR links.py: checkout que NO es Stripe -> ' + ', '.join(sorted(set(otras))[:5]))
+    if 'CU_SOLO_STRIPE' not in s:
+        sys.exit('ERROR links.py: falta el candado CU_SOLO_STRIPE en el HTML')
+    print('candado: 0 checkouts fuera de Stripe · CU_SOLO_STRIPE presente')
+
     print('validaciones OK')
 
 

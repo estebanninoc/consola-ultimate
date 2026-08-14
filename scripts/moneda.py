@@ -53,7 +53,7 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
        CO: {
          moneda: "COP",
          precios: { "39.99": 129900, "117.64": 389900 },   // USD del HTML -> precio local exacto
-         links:   { "principal": "https://pay.hotmart.com/....?off=xxxx",
+         links:   { "principal": "https://buy.stripe.com/xxxxxxxxxxxx",
                     "principal+gold-pc": "...",
                     "principal+gold-mob": "...",
                     "principal+gold-pc+gold-mob": "..." }
@@ -68,10 +68,10 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
       moneda: "COP",
       precios: { "39.99": 129900, "117.64": 389900, "34.00": 110000, "85.00": 275000, "35.20": 114000, "88.00": 285000 },
       links: {
-        "principal":                   "https://pay.hotmart.com/XXXXXXXXX?off=aaaaaaaa",
-        "principal+gold-pc":           "https://pay.hotmart.com/XXXXXXXXX?off=bbbbbbbb",
-        "principal+gold-mob":          "https://pay.hotmart.com/XXXXXXXXX?off=cccccccc",
-        "principal+gold-pc+gold-mob":  "https://pay.hotmart.com/XXXXXXXXX?off=dddddddd"
+        "principal":                   "https://buy.stripe.com/aaaaaaaaaaaa",
+        "principal+gold-pc":           "https://buy.stripe.com/bbbbbbbbbbbb",
+        "principal+gold-mob":          "https://buy.stripe.com/cccccccccccc",
+        "principal+gold-pc+gold-mob":  "https://buy.stripe.com/dddddddddddd"
       }
     }
     */
