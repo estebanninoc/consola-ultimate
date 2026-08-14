@@ -387,7 +387,7 @@
 
 
 
-<meta content="7c3809ca-61a8-4d41-a1fd-e67662e6f967" name="shopify-y"/>
+<meta content="8ebd2d12-1243-4292-9688-34a95accef7e" name="shopify-y"/>
 <link crossorigin="" href="https://open.er-api.com" rel="preconnect"/>
 <link href="https://api.country.is" rel="dns-prefetch"/>
 <style id="cu-fx-guard">html.cu-fx-wait .cu-main-price,html.cu-fx-wait .cu-main-compare,html.cu-fx-wait .cu-bump-price,html.cu-fx-wait .cu-bump-compare,html.cu-fx-wait .price-item--sale,html.cu-fx-wait .price-item--regular,html.cu-fx-wait #cu-total,html.cu-fx-wait #cu-savings{visibility:hidden!important}</style>
@@ -495,10 +495,10 @@
        CO: {
          moneda: "COP",
          precios: { "39.99": 129900, "117.64": 389900 },   // USD del HTML -> precio local exacto
-         links:   { "principal": "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",
-                    "principal+gold-pc": "https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05",
-                    "principal+gold-mob": "https://buy.stripe.com/8x200j7M2cjygM4au77kc06",
-                    "principal+gold-pc+gold-mob": "https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07" }
+         links:   { "principal": "https://buy.stripe.com/xxxxxxxxxxxx",
+                    "principal+gold-pc": "...",
+                    "principal+gold-mob": "...",
+                    "principal+gold-pc+gold-mob": "..." }
        }
      Precios USD que aparecen en la pagina y conviene mapear:
        principal 39.99 (antes 117.64) · Ultimate Leyenda 34.00 (antes 85.00)
@@ -510,10 +510,10 @@
       moneda: "COP",
       precios: { "39.99": 129900, "117.64": 389900, "34.00": 110000, "85.00": 275000, "35.20": 114000, "88.00": 285000 },
       links: {
-        "principal":                   "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",
-        "principal+gold-pc":           "https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05",
-        "principal+gold-mob":          "https://buy.stripe.com/8x200j7M2cjygM4au77kc06",
-        "principal+gold-pc+gold-mob":  "https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07"
+        "principal":                   "https://buy.stripe.com/aaaaaaaaaaaa",
+        "principal+gold-pc":           "https://buy.stripe.com/bbbbbbbbbbbb",
+        "principal+gold-mob":          "https://buy.stripe.com/cccccccccccc",
+        "principal+gold-pc+gold-mob":  "https://buy.stripe.com/dddddddddddd"
       }
     }
     */
@@ -1444,7 +1444,10 @@ window.cuGoCheckout = function(){
   });
   var combo = keys.join('+');
   var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
-  var link = _okStripe(LINKS_COMBO && LINKS_COMBO[combo]) || _okStripe(LINKS_DE_PAGO.principal) || '';
+  var link = (LINKS_COMBO && LINKS_COMBO[combo]) || LINKS_DE_PAGO.principal || '';
+  /* 🔒 CU_SOLO_STRIPE — se filtra DESPUES de resolver para que tambien pase por
+     el candado el link de oferta por pais que inyecta scripts/moneda.py. */
+  link = _okStripe(link) || _okStripe(LINKS_DE_PAGO.principal) || '';
   if(!link){
     var btn = document.getElementById('cu-btn'); var prev = btn.innerHTML;
     btn.innerHTML = '⚠️ Configura tu link de pago';
@@ -2541,7 +2544,7 @@ function faqToggle(btn){
           $9.99 USD
         </span>
 </div></div><span class="badge price__badge-sale color-scheme-4">
-        Oferta Lanzamiento 70% OFF 🎁 
+        Oferta por única vez  70% OFF 🎁 
       </span>
 <span class="badge price__badge-sold-out color-scheme-3">
         Agotado
@@ -6287,7 +6290,7 @@ function cuFaqToggle(btn) {
           $9.99 USD
         </span>
 </div></div><span class="badge price__badge-sale color-scheme-4">
-        Oferta Lanzamiento 70% OFF 🎁 
+        Oferta por única vez  70% OFF 🎁 
       </span>
 <span class="badge price__badge-sold-out color-scheme-3">
         Agotado
@@ -6687,9 +6690,14 @@ function cuFaqToggle(btn) {
     });
     var combo = keys.join("+");
     var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
-    var link = _okStripe(window.CU_LINK_PAIS && window.CU_LINK_PAIS(combo))
-            || _okStripe(LINKS_COMBO && LINKS_COMBO[combo])
-            || _okStripe(LINKS_DE_PAGO.principal) || "";
+    var link = (window.CU_LINK_PAIS && window.CU_LINK_PAIS(combo))
+            || (LINKS_COMBO && LINKS_COMBO[combo])
+            || LINKS_DE_PAGO.principal || "";
+    /* 🔒 CU_SOLO_STRIPE — se filtra DESPUES de resolver para que tambien pase por
+       el candado el link de oferta por pais que inyecta scripts/moneda.py.
+       OJO: la linea de arriba la busca moneda.py TEXTUALMENTE (viejo_link) para
+       enganchar CU_LINK_PAIS — si se la reescribe, el build aborta. */
+    link = _okStripe(link) || _okStripe(LINKS_DE_PAGO.principal) || "";
     if(!link){
       var btn = document.getElementById("cu-btn"); var prev = btn.innerHTML;
       btn.innerHTML = "⚠️ Configura tu link de pago";
@@ -6866,10 +6874,13 @@ function cuFaqToggle(btn) {
       });
       var combo = keys.join("+");
 
+      var link = (window.CU_LINK_PAIS && window.CU_LINK_PAIS(combo))
+              || (window.LINKS_COMBO && LINKS_COMBO[combo])
+              || (window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
+      /* 🔒 CU_SOLO_STRIPE — este es el ultimo punto antes del redirect real:
+         si la URL no es de Stripe se descarta y cae al principal. */
       var _okStripe = window.CU_SOLO_STRIPE || function(u){ return (typeof u==="string" && u.indexOf("https://buy.stripe.com/")===0) ? u : ""; };
-      var link = _okStripe(window.CU_LINK_PAIS && window.CU_LINK_PAIS(combo))
-              || _okStripe(window.LINKS_COMBO && LINKS_COMBO[combo])
-              || _okStripe(window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
+      link = _okStripe(link) || _okStripe(window.LINKS_DE_PAGO && LINKS_DE_PAGO.principal) || "";
       if(!link) return _go.apply(this, arguments);
 
       var t = window.CU_TRACK ? window.CU_TRACK(combo) : {ref:combo.replace(/\+/g,"-")};
