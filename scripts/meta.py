@@ -191,6 +191,12 @@ TAIL = r'''<script>
       var sep = link.indexOf("?") > -1 ? "&" : "?";
       link += sep + "client_reference_id=" + encodeURIComponent(t.ref);
 
+      /* 🌎 CHECKOUT SIEMPRE EN ESPANOL — este es el ultimo punto antes del
+         redirect real, asi que aca se garantiza el idioma pase lo que pase.
+         Va DESPUES del candado CU_SOLO_STRIPE y DESPUES de client_reference_id:
+         es aditivo, no pisa ningun parametro que ya viaje. */
+      link = window.CU_ESPANOL ? window.CU_ESPANOL(link) : link;
+
       try{ ev("InitiateCheckout"); }catch(e){}
 
       /* pequena pausa para que el pixel alcance a enviar el evento */

@@ -94,6 +94,24 @@ var LINKS_COMBO = {
 window.CU_SOLO_STRIPE = function(u){
   return (typeof u === "string" && u.indexOf("https://buy.stripe.com/") === 0) ? u : "";
 };
+
+/* 🌎 CU_ESPANOL — el checkout de Stripe SIEMPRE en espanol (2026-08-14).
+   Stripe Checkout usa por defecto locale "auto": toma el idioma del navegador
+   del comprador, asi que un celular en ingles abre el checkout en ingles.
+   El parametro de URL ?locale= fija el idioma de la sesion (Stripe lo lee como
+   prefilledLocale y lo manda como "locale" del checkout, aparte y por encima de
+   browser_init.browser_locale). "es-419" = espanol latinoamericano, presente en
+   el enum de locales soportados de Stripe.
+   Se aplica DESPUES de resolver el link y DESPUES del candado CU_SOLO_STRIPE, y
+   es aditivo: no pisa los parametros que ya viajan (sck, client_reference_id).
+   El ?v= del redirect a /gracias/ vive en after_completion DENTRO de Stripe, no
+   en esta URL, asi que no lo toca. Idempotente: si ya hay locale, no duplica. */
+window.CU_LOCALE = "es-419";
+window.CU_ESPANOL = function(u){
+  if(typeof u !== "string" || !u) return u;
+  if(/[?&]locale=/.test(u)) return u;
+  return u + (u.indexOf("?") > -1 ? "&" : "?") + "locale=" + window.CU_LOCALE;
+};
 </script>'''
 html2 = html2.replace('</head>', config + '\n</head>', 1)
 
@@ -118,7 +136,8 @@ nuevo = '''window.cuGoCheckout = function(){
   }
   /* etiqueta la venta en Stripe con lo seleccionado en la landing (sck) */
   link += (link.indexOf('?') > -1 ? '&' : '?') + 'sck=' + encodeURIComponent(combo);
-  window.location.href = link;
+  /* 🌎 el checkout siempre en espanol — ultimo paso, no pisa nada de lo de arriba */
+  window.location.href = (window.CU_ESPANOL ? window.CU_ESPANOL(link) : link);
 };'''
 html2 = html2[:m.start()] + nuevo + html2[m.end():]
 html2 = re.sub(r"fetch\('/cart/clear\.js'[\s\S]*?\.catch\(function\(e\)\{[^}]*\}\);", '', html2)
@@ -314,7 +333,8 @@ solo_packs = '''<script>
       return;
     }
     link += (link.indexOf("?") > -1 ? "&" : "?") + "sck=" + encodeURIComponent(combo);
-    window.location.href = link;
+    /* 🌎 el checkout siempre en espanol — ultimo paso, no pisa nada de lo de arriba */
+    window.location.href = (window.CU_ESPANOL ? window.CU_ESPANOL(link) : link);
   };
 })();
 </script>'''
