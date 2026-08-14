@@ -454,12 +454,14 @@
   fbq('init', PIXEL);
   fbq('track', 'PageView');
 
-  /* ViewContent: el visitante esta viendo el producto */
+  /* ViewContent: el visitante esta viendo el producto.
+     El valor es el precio REAL de entrada en Stripe (payment link 7kc04 = 9.99 USD).
+     Si cambia el precio de venta, cambiar tambien aqui: Meta optimiza con este numero. */
   fbq('track', 'ViewContent', {
     content_name: 'MULTICONSOLA ULTIMATE RETRO',
     content_type: 'product',
     content_ids: ['consola-ultimate'],
-    value: 34.99,
+    value: 9.99,
     currency: 'USD'
   });
 })();
@@ -760,7 +762,7 @@
    (Mercado Pago, Wompi, Bold, Hotmart, PayPal...)
    ═════════════════════════════════════════════════════════════ */
 var LINKS_DE_PAGO = {
-  principal: "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",   /* MULTICONSOLA ULTIMATE RETRO™ — $34.99 */
+  principal: "https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04",   /* MULTICONSOLA ULTIMATE RETRO™ — $9.99 (verificado en Stripe 2026-08-13) */
   b0: "https://pay.hotmart.com/X106964889D?off=c7rnch8s",   /* JUEGOS DE PS4            — $27.99 */
   b1: "https://pay.hotmart.com/O106964911H?off=0vqlev44",   /* JUEGOS DE PS5            — $29.60 */
   b2: "https://pay.hotmart.com/F106964936U?off=8fkm1imy",   /* JUEGOS DE XBOX SERIES    — $25.60 */
