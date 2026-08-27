@@ -79,37 +79,44 @@ HEAD = r'''<link crossorigin="" href="https://open.er-api.com" rel="preconnect"/
 
   /* ─────────────────────────────────────────────────────────────
      PRECIOS FIJOS DE STRIPE — la misma tabla que currency_options
-     (montos de venta; generados 2026-08-05 con tasa open.er-api.com
-     x1.045 de colchon — ARS x1.12 — y redondeo comercial hacia arriba)
 
      Claves: el precio USD que aparece en la pagina -> monto local EXACTO.
-       9.99 principal y cada pack · 19.98 principal+un pack
-       25.99 los tres juntos (rebaja 2026-08-11; tasa open.er-api del dia
-       x1.045 de colchon, ARS x1.12, redondeo comercial hacia arriba;
-       19.98 = exactamente 2x el monto de 9.99 para que el carrito cuadre)
+        2.99  cada bono suelto, para la tarjeta del pack
+        9.99  la multiconsola sola
+       12.98  multiconsola + un bono   (9.99 + 2.99, la suma cuadra exacta)
+       14.99  los tres juntos, con descuento extra sobre 15.97
+
      El checkout de Stripe presenta EXACTAMENTE estos montos por IP.
 
+     REBAJA DE BONOS 2026-08-27: los bonos bajan de 9.99 a 2.99 y el trio
+     de 25.99 a 14.99. Medido sobre 224 sesiones de checkout de Stripe del
+     18 al 27 de agosto: un combo que cuesta 30% mas que el producto base
+     cierra 48.1%, contra 18.6% del base solo. Los combos que costaban el
+     doble y el triple cerraban 16.7% y 22.2%, o sea igual que el base: a
+     partir de cierto salto el combo deja de acelerar la venta.
+
      ⚙️ Si se cambia un precio: actualizar currency_options en Stripe Y
-     esta tabla, en el mismo commit. Prices (rebaja):
-       price_1U3GIKEIkdT1ZKloupKnLL1R (9.99)
-       price_1U3GIZEIkdT1ZKloDXAnEwe3 / price_1U3GIlEIkdT1ZKlotre7Mk9Y (19.98)
-       price_1U3GIwEIkdT1ZKloNOTmFmnC (25.99)
+     esta tabla, en el mismo commit. Prices vigentes:
+       price_1U3GIKEIkdT1ZKloupKnLL1R  (9.99  principal)
+       price_1U965lEIkdT1ZKloNV07tnWN  (12.98 +leyenda)
+       price_1U965sEIkdT1ZKlo5HGI9Pc1  (12.98 +supremo)
+       price_1U965QEIkdT1ZKlo8bkEvQf7  (14.99 los tres)
      ───────────────────────────────────────────────────────────── */
   var STRIPE_PRECIOS = {
-    COP: {"9.99":33900,  "19.98":67800,  "25.99":85900},
-    MXN: {"9.99":179,    "19.98":358,    "25.99":469},
-    BRL: {"9.99":53.99,  "19.98":107.98, "25.99":139},
-    PEN: {"9.99":35.99,  "19.98":71.98,  "25.99":91.99},
-    CLP: {"9.99":9900,   "19.98":19800,  "25.99":24900},
-    ARS: {"9.99":16900,  "19.98":33800,  "25.99":43900},
-    UYU: {"9.99":429,    "19.98":858,    "25.99":1099},
-    GTQ: {"9.99":79.99,  "19.98":159.98, "25.99":209},
-    HNL: {"9.99":289,    "19.98":578,    "25.99":729},
-    NIO: {"9.99":389,    "19.98":778,    "25.99":1009},
-    CRC: {"9.99":4749,   "19.98":9498,   "25.99":12900},
-    DOP: {"9.99":609,    "19.98":1218,   "25.99":1589},
-    PYG: {"9.99":62900,  "19.98":125800, "25.99":161900},
-    BOB: {"9.99":129,    "19.98":258,    "25.99":329}
+    COP: {"2.99":10900, "9.99":33900,  "12.98":44800,  "14.99":49900},
+    MXN: {"2.99":59,    "9.99":179,    "12.98":238,    "14.99":269},
+    BRL: {"2.99":16.99, "9.99":53.99,  "12.98":70.98,  "14.99":79.99},
+    PEN: {"2.99":10.99, "9.99":35.99,  "12.98":46.98,  "14.99":52.99},
+    CLP: {"2.99":2990,  "9.99":9900,   "12.98":12890,  "14.99":14900},
+    ARS: {"2.99":5100,  "9.99":16900,  "12.98":22000,  "14.99":25400},
+    UYU: {"2.99":129,   "9.99":429,    "12.98":558,    "14.99":649},
+    GTQ: {"2.99":23.99, "9.99":79.99,  "12.98":103.98, "14.99":119},
+    HNL: {"2.99":89,    "9.99":289,    "12.98":378,    "14.99":439},
+    NIO: {"2.99":119,   "9.99":389,    "12.98":508,    "14.99":589},
+    CRC: {"2.99":1449,  "9.99":4749,   "12.98":6198,   "14.99":7149},
+    DOP: {"2.99":189,   "9.99":609,    "12.98":798,    "14.99":919},
+    PYG: {"2.99":18900, "9.99":62900,  "12.98":81800,  "14.99":94900},
+    BOB: {"2.99":39,    "9.99":129,    "12.98":168,    "14.99":199}
   };
 
   /* Factor SOLO para los numeros decorativos (precios tachados, "ahorras"):
@@ -399,6 +406,11 @@ def main():
         fallos.append('se perdieron los links de pago')
     if 'ipapi.co' in s:
         fallos.append('quedo codigo viejo de geolocalizacion (ipapi.co)')
+    # ── la tabla de monedas tiene que cubrir los 4 escalones vigentes,
+    #    si no la landing mostraria un aproximado donde el checkout cobra fijo
+    for escalon in ('"2.99"', '"9.99"', '"12.98"', '"14.99"'):
+        if escalon not in s:
+            fallos.append('falta el escalon %s en STRIPE_PRECIOS' % escalon)
     if fallos:
         sys.exit('ERROR moneda.py:\n  - ' + '\n  - '.join(fallos))
     print('validaciones OK')
