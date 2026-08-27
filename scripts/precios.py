@@ -10,15 +10,20 @@ depender de Shopify ni de editar el index.html a mano.
 Tabla actual (debe coincidir con los Prices de Stripe):
 
     Producto principal           9.99   antes  33.00   -70%
-    Ultimate Leyenda             9.99   antes  35.00   -71%
-    Pack Supremo Mobile          9.99   antes  36.00   -72%
+    Ultimate Leyenda             2.99   antes  12.00   -75%
+    Pack Supremo Mobile          2.99   antes  12.00   -75%
 
-    principal + leyenda         19.98
-    principal + supremo         19.98
-    los tres juntos             25.99   (suma 29.97, descuento extra de 3.98)
+    principal + leyenda         12.98
+    principal + supremo         12.98
+    los tres juntos             14.99   (suma 15.97, descuento extra de 0.98)
 
-    (Rebaja 2026-08-11: todo a 9.99 / trio 25.99; los "antes" conservan los
-    mismos porcentajes de descuento de la tabla anterior.)
+    (Rebaja 2026-08-11: todo a 9.99 / trio 25.99.)
+    (Rebaja de bonos 2026-08-27: los bonos bajan de 9.99 a 2.99 y el trio
+     de 25.99 a 14.99. Motivo, medido sobre 224 sesiones de checkout de
+     Stripe entre el 18 y el 27 de agosto: un combo que cuesta 30% mas que
+     el producto base cierra 48.1%, contra 18.6% del base solo. Los combos
+     que costaban el doble y el triple cerraban 16.7% y 22.2%, o sea igual
+     que el base. Un bono barato acelera la venta; uno caro la frena.)
 
 Ese ultimo es el motivo de que exista la parte de JavaScript: llevar los tres
 NO es la suma, tiene un descuento adicional, y el carrito tiene que reflejarlo.
@@ -34,9 +39,9 @@ ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 MARCA = 'CU-PRECIOS v1'
 
 PRINCIPAL, PRINCIPAL_ANTES, PRINCIPAL_PCT = 9.99, 33.00, 70
-LEYENDA,   LEYENDA_ANTES,   LEYENDA_PCT   = 9.99, 35.00, 71
-SUPREMO,   SUPREMO_ANTES,   SUPREMO_PCT   = 9.99, 36.00, 72
-TODO = 25.99                      # los tres juntos, con descuento extra
+LEYENDA,   LEYENDA_ANTES,   LEYENDA_PCT   = 2.99, 12.00, 75
+SUPREMO,   SUPREMO_ANTES,   SUPREMO_PCT   = 2.99, 12.00, 75
+TODO = 14.99                      # los tres juntos, con descuento extra
 TODO_ANTES = PRINCIPAL_ANTES + LEYENDA_ANTES + SUPREMO_ANTES
 
 # lo que trae Shopify -> lo que debe decir
@@ -193,6 +198,12 @@ def main():
             fallos.append('quedo un precio viejo sin cambiar: %s' % viejo)
     if '$%.2f' % PRINCIPAL not in s:
         fallos.append('no aparece el precio nuevo del principal')
+    # ── el combo NUNCA puede costar mas que la suma de sus partes,
+    #    y el bono NUNCA mas que el producto principal
+    if TODO >= PRINCIPAL + LEYENDA + SUPREMO:
+        fallos.append('el trio no tiene descuento sobre la suma')
+    if LEYENDA >= PRINCIPAL or SUPREMO >= PRINCIPAL:
+        fallos.append('un bono cuesta igual o mas que el producto principal')
     if fallos:
         sys.exit('ERROR precios.py:\n  - ' + '\n  - '.join(fallos))
     print('validaciones OK')
