@@ -10,9 +10,9 @@ basta con editar la tabla de abajo.
 
 Cada clave es la combinacion que arma el carrito:
     principal                      solo el producto            $9.99
-    principal+gold-pc              + Ultimate Leyenda         $19.98
-    principal+gold-mob             + Pack Supremo Mobile      $19.98
-    principal+gold-pc+gold-mob     los tres                   $25.99
+    principal+gold-pc              + Ultimate Leyenda         $12.98
+    principal+gold-mob             + Pack Supremo Mobile      $12.98
+    principal+gold-pc+gold-mob     los tres                   $14.99
 
 ⚙️ Los Payment Links de Stripe presentan el precio EN LA MONEDA LOCAL del
 comprador (por IP): cada Price tiene currency_options con montos fijos en
@@ -42,14 +42,14 @@ import sys
 ARCHIVO = os.environ.get('CU_INDEX', 'index.html')
 
 LINKS = {
-    # MULTICONSOLA ULTIMATE RETRO — $9.99
+    # MULTICONSOLA ULTIMATE RETRO — $9.99   (price_1U3GIKEIkdT1ZKloupKnLL1R)
     'principal': 'https://buy.stripe.com/8x2dR94zQ0AQfI031F7kc04',
-    # + ULTIMATE LEYENDA — $19.98
-    'principal+gold-pc': 'https://buy.stripe.com/5kQcN55DU6Ze3Zi0Tx7kc05',
-    # + PACK SUPREMO MOBILE — $19.98
-    'principal+gold-mob': 'https://buy.stripe.com/8x200j7M2cjygM4au77kc06',
-    # LOS TRES — $25.99
-    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/3cI6oHaYe83i67q6dR7kc07',
+    # + ULTIMATE LEYENDA — $12.98           (price_1U965lEIkdT1ZKloNV07tnWN)
+    'principal+gold-pc': 'https://buy.stripe.com/7sYfZheaq0AQ7bu45J7kc0h',
+    # + PACK SUPREMO MOBILE — $12.98        (price_1U965sEIkdT1ZKlo5HGI9Pc1)
+    'principal+gold-mob': 'https://buy.stripe.com/6oU9AT8Q60AQanGcCf7kc0i',
+    # LOS TRES — $14.99                     (price_1U965QEIkdT1ZKlo8bkEvQf7)
+    'principal+gold-pc+gold-mob': 'https://buy.stripe.com/6oU28r0jA1EU7bu31F7kc0g',
 }
 
 
@@ -119,3 +119,11 @@ if __name__ == '__main__':
 # 2026-08-11 (3): /acceso-gb7k2/ RETIRADA de este repo (riesgo: repo publico = ruta
 #             visible). Las zonas de descarga viven ahora en un repo aparte sin
 #             vinculo con la pagina, con links ofuscados. Toque para deploy.
+# 2026-08-27: BONOS A 2.99 — combos 12.98 y trio 14.99 (antes 19.98 y 25.99).
+#             Motivo, medido sobre 224 sesiones de checkout de Stripe del 18 al 27:
+#             el combo de CapCut, que cuesta 30% mas que su base, cierra 48.1%
+#             contra 18.6% de su propio base. Los combos de Game Box, que costaban
+#             el doble y el triple, cerraban 16.7% y 22.2%, o sea igual que su base:
+#             a +100% el combo deja de ser un acelerador y pasa a ser un obstaculo.
+#             Prices nuevos con las mismas 14 monedas fijas; los 3 links viejos se
+#             desactivan SOLO despues de verificar la landing en vivo.
