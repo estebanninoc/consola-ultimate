@@ -6938,7 +6938,7 @@ function cuFaqToggle(btn) {
 <script>/* velx1: imágenes fuera del primer pantallazo (carrito cerrado, testimonios, carrusel, ficha) se piden al acercarse (1200px) o justo después de 'load'; mismas imágenes, mismo tamaño */
 (function(){var L=[].slice.call(document.querySelectorAll('img[data-vx-src]'));
 function go(i){if(!i.hasAttribute('data-vx-src'))return;var s=i.getAttribute('data-vx-srcset');if(s){i.setAttribute('srcset',s);i.removeAttribute('data-vx-srcset')}i.setAttribute('src',i.getAttribute('data-vx-src'));i.removeAttribute('data-vx-src')}
-function todo(){L.forEach(go)}
+function todo(){var M=[];L.forEach(function(i){if(i.classList.contains('global-media-settings'))M.push(i);else go(i)});/* velx1: las imágenes del modal se piden después de la ficha, como en el original (la ficha elige la misma resolución del srcset) */var P=[].slice.call(document.querySelectorAll('img.image-magnify-none')).filter(function(i){return !i.complete}).map(function(i){return new Promise(function(r){i.addEventListener('load',r);i.addEventListener('error',r)})});Promise.race([Promise.all(P),new Promise(function(r){setTimeout(r,3000)})]).then(function(){M.forEach(go)})}
 if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);go(e.target)}})},{rootMargin:'1200px 0px'});L.forEach(function(i){io.observe(i)})}else todo();
 ['pointerdown','touchstart','keydown'].forEach(function(ev){window.addEventListener(ev,todo,{once:true,passive:true})});
 if(document.readyState==='complete')todo();else window.addEventListener('load',function(){setTimeout(todo,0)});})();</script>
