@@ -1730,7 +1730,7 @@ updateTotals();
       if(typeof prevCallback === 'function') prevCallback();
       cuIniciarPlayer();
     };
-    if(!document.getElementById('cu-yt-api')){
+    if(!document.getElementById('cu-yt-api')&&!document.getElementById('_ytapi')){
       var tag = document.createElement('script');
       tag.id   = 'cu-yt-api';
       tag.src  = 'https://www.youtube.com/iframe_api';
@@ -3988,7 +3988,7 @@ font-size:16px;
 <div class="vps2-corner br"></div>
 <!-- FACHADA -->
 <div class="vps2-facade" id="vps2-facade" onclick="vps2Play()">
-<img alt="Lista PS2" decoding="async" loading="lazy" src="https://img.youtube.com/vi/2vPprnU_IKg/maxresdefault.jpg"/>
+<picture><source srcset="https://i.ytimg.com/vi_webp/2vPprnU_IKg/maxresdefault.webp" type="image/webp"/><img alt="Lista PS2" decoding="async" loading="lazy" src="https://img.youtube.com/vi/2vPprnU_IKg/maxresdefault.jpg"/></picture>
 <div class="vps2-facade-overlay"></div>
 <div class="vps2-play-wrap">
 <div class="vps2-play-circle">
@@ -4015,7 +4015,7 @@ font-size:16px;
 <script>
 (function(){
   'use strict';
-  var VID='2vPprnU_IKg',p=null,rdy=false,playing=true,muted=true,started=false;
+  var VID='2vPprnU_IKg',p=null,rdy=false,playing=true,muted=true,started=false,err=false;
 
   window.vps2Play=function(){
     if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}
@@ -4024,24 +4024,38 @@ font-size:16px;
     document.getElementById('vps2-facade').style.display='none';
     document.getElementById('vps2-vidbox').classList.add('on');
     document.getElementById('vps2-ctrl').classList.add('on');
+    if(err){document.querySelector('.vps2').style.display='none';return;}
+    if(p){if(rdy){try{p.playVideo();}catch(e){}}return;}
+    cargar();
+  };
+
+  /* gbvid-1: el reproductor se arma escondido cuando la sección se acerca; al tocar solo arranca */
+  function cargar(){
     if(window.YT&&window.YT.Player){_init();return;}
     var prev=window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function')prev();_init();};
-    if(!document.getElementById('_ytapi')){
+    if(!document.getElementById('_ytapi')&&!document.getElementById('cu-yt-api')){
       var s=document.createElement('script');
       s.id='_ytapi';s.src='https://www.youtube.com/iframe_api';s.async=true;
       document.head.appendChild(s);
     }
-  };
+  }
+  function preparar(){
+    if(location.protocol==='file:'||!('IntersectionObserver' in window))return;
+    var el=document.querySelector('.vps2');if(!el)return;
+    var ob=new IntersectionObserver(function(en){if(en[0].isIntersecting){ob.disconnect();if(!p)cargar();}},{rootMargin:'600px 0px'});
+    ob.observe(el);
+  }
+  if(document.readyState==='complete')preparar();else window.addEventListener('load',function(){setTimeout(preparar,0);});
 
   function _init(){
     if(p)return;
     p=new YT.Player('vps2-player',{
       videoId:VID,
-      playerVars:{autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
+      playerVars:{autoplay:started?1:0,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
       events:{
-        onReady:function(e){rdy=true;e.target.playVideo();},
-        onError:function(){document.querySelector('.vps2').style.display='none';}
+        onReady:function(e){rdy=true;if(started)e.target.playVideo();},
+        onError:function(){if(started)document.querySelector('.vps2').style.display='none';else err=true;}
       }
     });
   }
@@ -4150,7 +4164,7 @@ font-size:16px;
 <div class="vps4-corner bl"></div>
 <div class="vps4-corner br"></div>
 <div class="vps4-facade" id="vps4-facade" onclick="vps4Play()">
-<img alt="Lista PS4" decoding="async" loading="lazy" src="https://img.youtube.com/vi/SpLmtR9pQJg/maxresdefault.jpg"/>
+<picture><source srcset="https://i.ytimg.com/vi_webp/SpLmtR9pQJg/maxresdefault.webp" type="image/webp"/><img alt="Lista PS4" decoding="async" loading="lazy" src="https://img.youtube.com/vi/SpLmtR9pQJg/maxresdefault.jpg"/></picture>
 <div class="vps4-facade-overlay"></div>
 <div class="vps4-play-wrap">
 <div class="vps4-play-circle">
@@ -4175,7 +4189,7 @@ font-size:16px;
 <script>
 (function(){
   'use strict';
-  var VID='SpLmtR9pQJg',p=null,rdy=false,playing=true,muted=true,started=false;
+  var VID='SpLmtR9pQJg',p=null,rdy=false,playing=true,muted=true,started=false,err=false;
 
   window.vps4Play=function(){
     if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}
@@ -4184,24 +4198,38 @@ font-size:16px;
     document.getElementById('vps4-facade').style.display='none';
     document.getElementById('vps4-vidbox').classList.add('on');
     document.getElementById('vps4-ctrl').classList.add('on');
+    if(err){document.querySelector('.vps4').style.display='none';return;}
+    if(p){if(rdy){try{p.playVideo();}catch(e){}}return;}
+    cargar();
+  };
+
+  /* gbvid-1: el reproductor se arma escondido cuando la sección se acerca; al tocar solo arranca */
+  function cargar(){
     if(window.YT&&window.YT.Player){_init();return;}
     var prev=window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function')prev();_init();};
-    if(!document.getElementById('_ytapi')){
+    if(!document.getElementById('_ytapi')&&!document.getElementById('cu-yt-api')){
       var s=document.createElement('script');
       s.id='_ytapi';s.src='https://www.youtube.com/iframe_api';s.async=true;
       document.head.appendChild(s);
     }
-  };
+  }
+  function preparar(){
+    if(location.protocol==='file:'||!('IntersectionObserver' in window))return;
+    var el=document.querySelector('.vps4');if(!el)return;
+    var ob=new IntersectionObserver(function(en){if(en[0].isIntersecting){ob.disconnect();if(!p)cargar();}},{rootMargin:'600px 0px'});
+    ob.observe(el);
+  }
+  if(document.readyState==='complete')preparar();else window.addEventListener('load',function(){setTimeout(preparar,0);});
 
   function _init(){
     if(p)return;
     p=new YT.Player('vps4-player',{
       videoId:VID,
-      playerVars:{autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
+      playerVars:{autoplay:started?1:0,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
       events:{
-        onReady:function(e){rdy=true;e.target.playVideo();},
-        onError:function(){document.querySelector('.vps4').style.display='none';}
+        onReady:function(e){rdy=true;if(started)e.target.playVideo();},
+        onError:function(){if(started)document.querySelector('.vps4').style.display='none';else err=true;}
       }
     });
   }
@@ -4310,7 +4338,7 @@ font-size:16px;
 <div class="vps5-corner bl"></div>
 <div class="vps5-corner br"></div>
 <div class="vps5-facade" id="vps5-facade" onclick="vps5Play()">
-<img alt="Lista PS5" decoding="async" loading="lazy" src="https://img.youtube.com/vi/qgaQb3kBCrI/maxresdefault.jpg"/>
+<picture><source srcset="https://i.ytimg.com/vi_webp/qgaQb3kBCrI/maxresdefault.webp" type="image/webp"/><img alt="Lista PS5" decoding="async" loading="lazy" src="https://img.youtube.com/vi/qgaQb3kBCrI/maxresdefault.jpg"/></picture>
 <div class="vps5-facade-overlay"></div>
 <div class="vps5-play-wrap">
 <div class="vps5-play-circle">
@@ -4335,7 +4363,7 @@ font-size:16px;
 <script>
 (function(){
   'use strict';
-  var VID='qgaQb3kBCrI',p=null,rdy=false,playing=true,muted=true,started=false;
+  var VID='qgaQb3kBCrI',p=null,rdy=false,playing=true,muted=true,started=false,err=false;
 
   window.vps5Play=function(){
     if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}
@@ -4344,24 +4372,38 @@ font-size:16px;
     document.getElementById('vps5-facade').style.display='none';
     document.getElementById('vps5-vidbox').classList.add('on');
     document.getElementById('vps5-ctrl').classList.add('on');
+    if(err){document.querySelector('.vps5').style.display='none';return;}
+    if(p){if(rdy){try{p.playVideo();}catch(e){}}return;}
+    cargar();
+  };
+
+  /* gbvid-1: el reproductor se arma escondido cuando la sección se acerca; al tocar solo arranca */
+  function cargar(){
     if(window.YT&&window.YT.Player){_init();return;}
     var prev=window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function')prev();_init();};
-    if(!document.getElementById('_ytapi')){
+    if(!document.getElementById('_ytapi')&&!document.getElementById('cu-yt-api')){
       var s=document.createElement('script');
       s.id='_ytapi';s.src='https://www.youtube.com/iframe_api';s.async=true;
       document.head.appendChild(s);
     }
-  };
+  }
+  function preparar(){
+    if(location.protocol==='file:'||!('IntersectionObserver' in window))return;
+    var el=document.querySelector('.vps5');if(!el)return;
+    var ob=new IntersectionObserver(function(en){if(en[0].isIntersecting){ob.disconnect();if(!p)cargar();}},{rootMargin:'600px 0px'});
+    ob.observe(el);
+  }
+  if(document.readyState==='complete')preparar();else window.addEventListener('load',function(){setTimeout(preparar,0);});
 
   function _init(){
     if(p)return;
     p=new YT.Player('vps5-player',{
       videoId:VID,
-      playerVars:{autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
+      playerVars:{autoplay:started?1:0,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
       events:{
-        onReady:function(e){rdy=true;e.target.playVideo();},
-        onError:function(){document.querySelector('.vps5').style.display='none';}
+        onReady:function(e){rdy=true;if(started)e.target.playVideo();},
+        onError:function(){if(started)document.querySelector('.vps5').style.display='none';else err=true;}
       }
     });
   }
@@ -4476,7 +4518,7 @@ font-size:16px;
 <div class="vxbox-corner bl"></div>
 <div class="vxbox-corner br"></div>
 <div class="vxbox-facade" id="vxbox-facade" onclick="vxboxPlay()">
-<img alt="Lista Xbox Clásica" decoding="async" loading="lazy" src="https://img.youtube.com/vi/D7uuDjEBTOc/maxresdefault.jpg"/>
+<picture><source srcset="https://i.ytimg.com/vi_webp/D7uuDjEBTOc/maxresdefault.webp" type="image/webp"/><img alt="Lista Xbox Clásica" decoding="async" loading="lazy" src="https://img.youtube.com/vi/D7uuDjEBTOc/maxresdefault.jpg"/></picture>
 <div class="vxbox-facade-overlay"></div>
 <div class="vxbox-play-wrap">
 <div class="vxbox-play-circle">
@@ -4501,7 +4543,7 @@ font-size:16px;
 <script>
 (function(){
   'use strict';
-  var VID='D7uuDjEBTOc',p=null,rdy=false,playing=true,muted=true,started=false;
+  var VID='D7uuDjEBTOc',p=null,rdy=false,playing=true,muted=true,started=false,err=false;
 
   window.vxboxPlay=function(){
     if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}
@@ -4510,24 +4552,38 @@ font-size:16px;
     document.getElementById('vxbox-facade').style.display='none';
     document.getElementById('vxbox-vidbox').classList.add('on');
     document.getElementById('vxbox-ctrl').classList.add('on');
+    if(err){document.querySelector('.vxbox').style.display='none';return;}
+    if(p){if(rdy){try{p.playVideo();}catch(e){}}return;}
+    cargar();
+  };
+
+  /* gbvid-1: el reproductor se arma escondido cuando la sección se acerca; al tocar solo arranca */
+  function cargar(){
     if(window.YT&&window.YT.Player){_init();return;}
     var prev=window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function')prev();_init();};
-    if(!document.getElementById('_ytapi')){
+    if(!document.getElementById('_ytapi')&&!document.getElementById('cu-yt-api')){
       var s=document.createElement('script');
       s.id='_ytapi';s.src='https://www.youtube.com/iframe_api';s.async=true;
       document.head.appendChild(s);
     }
-  };
+  }
+  function preparar(){
+    if(location.protocol==='file:'||!('IntersectionObserver' in window))return;
+    var el=document.querySelector('.vxbox');if(!el)return;
+    var ob=new IntersectionObserver(function(en){if(en[0].isIntersecting){ob.disconnect();if(!p)cargar();}},{rootMargin:'600px 0px'});
+    ob.observe(el);
+  }
+  if(document.readyState==='complete')preparar();else window.addEventListener('load',function(){setTimeout(preparar,0);});
 
   function _init(){
     if(p)return;
     p=new YT.Player('vxbox-player',{
       videoId:VID,
-      playerVars:{autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
+      playerVars:{autoplay:started?1:0,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
       events:{
-        onReady:function(e){rdy=true;e.target.playVideo();},
-        onError:function(){document.querySelector('.vxbox').style.display='none';}
+        onReady:function(e){rdy=true;if(started)e.target.playVideo();},
+        onError:function(){if(started)document.querySelector('.vxbox').style.display='none';else err=true;}
       }
     });
   }
@@ -4641,7 +4697,7 @@ font-size:16px;
 <div class="vxbs-corner bl"></div>
 <div class="vxbs-corner br"></div>
 <div class="vxbs-facade" id="vxbs-facade" onclick="vxbsPlay()">
-<img alt="Lista Xbox Series" decoding="async" loading="lazy" src="https://img.youtube.com/vi/-U09rfO4WIo/maxresdefault.jpg"/>
+<picture><source srcset="https://i.ytimg.com/vi_webp/-U09rfO4WIo/maxresdefault.webp" type="image/webp"/><img alt="Lista Xbox Series" decoding="async" loading="lazy" src="https://img.youtube.com/vi/-U09rfO4WIo/maxresdefault.jpg"/></picture>
 <div class="vxbs-facade-overlay"></div>
 <div class="vxbs-play-wrap">
 <div class="vxbs-play-circle">
@@ -4666,7 +4722,7 @@ font-size:16px;
 <script>
 (function(){
   'use strict';
-  var VID='-U09rfO4WIo',p=null,rdy=false,playing=true,muted=true,started=false;
+  var VID='-U09rfO4WIo',p=null,rdy=false,playing=true,muted=true,started=false,err=false;
 
   window.vxbsPlay=function(){
     if(location.protocol==='file:'){window.open('https://www.youtube.com/watch?v='+VID,'_blank');return;}
@@ -4675,24 +4731,38 @@ font-size:16px;
     document.getElementById('vxbs-facade').style.display='none';
     document.getElementById('vxbs-vidbox').classList.add('on');
     document.getElementById('vxbs-ctrl').classList.add('on');
+    if(err){document.querySelector('.vxbs').style.display='none';return;}
+    if(p){if(rdy){try{p.playVideo();}catch(e){}}return;}
+    cargar();
+  };
+
+  /* gbvid-1: el reproductor se arma escondido cuando la sección se acerca; al tocar solo arranca */
+  function cargar(){
     if(window.YT&&window.YT.Player){_init();return;}
     var prev=window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function')prev();_init();};
-    if(!document.getElementById('_ytapi')){
+    if(!document.getElementById('_ytapi')&&!document.getElementById('cu-yt-api')){
       var s=document.createElement('script');
       s.id='_ytapi';s.src='https://www.youtube.com/iframe_api';s.async=true;
       document.head.appendChild(s);
     }
-  };
+  }
+  function preparar(){
+    if(location.protocol==='file:'||!('IntersectionObserver' in window))return;
+    var el=document.querySelector('.vxbs');if(!el)return;
+    var ob=new IntersectionObserver(function(en){if(en[0].isIntersecting){ob.disconnect();if(!p)cargar();}},{rootMargin:'600px 0px'});
+    ob.observe(el);
+  }
+  if(document.readyState==='complete')preparar();else window.addEventListener('load',function(){setTimeout(preparar,0);});
 
   function _init(){
     if(p)return;
     p=new YT.Player('vxbs-player',{
       videoId:VID,
-      playerVars:{autoplay:1,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
+      playerVars:{autoplay:started?1:0,mute:1,controls:0,modestbranding:1,rel:0,disablekb:1,iv_load_policy:3,showinfo:0,playsinline:1,fs:0,cc_load_policy:0},
       events:{
-        onReady:function(e){rdy=true;e.target.playVideo();},
-        onError:function(){document.querySelector('.vxbs').style.display='none';}
+        onReady:function(e){rdy=true;if(started)e.target.playVideo();},
+        onError:function(){if(started)document.querySelector('.vxbs').style.display='none';else err=true;}
       }
     });
   }
